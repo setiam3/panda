@@ -90,7 +90,7 @@ class PiringMangkokController extends \yii\web\Controller
                     }else{
                         $gender = "2";
                     }
-                    $birth = $data->px_dirth." 00:00:00";
+                    $birth = $data->px_birthdate." 00:00:00";
                     $request = '{
                         "metadata": {
                             "method": "new_claim"
@@ -267,17 +267,20 @@ class PiringMangkokController extends \yii\web\Controller
                 $payor_cd =  'JKN'; //'JKN' ;
             }
 
-            $sql = "select distinct kode_tagihan from finance.mv_pendapatan where visit_id = '$data->visit_id' and kode_tagihan in ('4.01.43','C.02')";
+            $sql = "select distinct kode_tagihan from finance.mv_pendapatan where visit_id = '$data->visit_id' AND kode_tagihan in ('4.01.43','C.02')";
             $select = \Yii::$app->db->createCommand($sql)->queryAll();
-            $select['pemulasaraan_jenazah'] = $select['mobil_jenazah'] = 0;
-            foreach ($select as $key => $v) {
-                if ($v->kode_tagihan == '4.01.43') {
-                    $select['pemulasaraan_jenazah'] = 1;
-                }
+            if (!empty($select)){
+                foreach ($select as $key => $v) {
+                    if ($v['kode_tagihan'] == '4.01.43') {
+                        $select['pemulasaraan_jenazah'] = 1;
+                    }
 
-                if ($v->kode_tagihan == 'C.02') {
-                    $select['mobil_jenazah'] = 1;
+                    if ($v['kode_tagihan'] == 'C.02') {
+                        $select['mobil_jenazah'] = 1;
+                    }
                 }
+            }else{
+                $select['pemulasaraan_jenazah'] = $select['mobil_jenazah'] = 0;
             }
 
             $request = '{
@@ -429,23 +432,20 @@ class PiringMangkokController extends \yii\web\Controller
 //        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
         /*obat*/
-        $data = (new \yii\db\Query())
-            ->select("to_char(a.date_act,'DD-MM-YYYY HH24:MM:SS') as tgl_sale,(sale_total - COALESCE(sale_total_returned,0))::numeric as sale_total,sale_services::numeric,a.sale_num as nomor_resep,a.doctor_name as par_name,sr.sr_total,string_agg(concat(vo.item_name,'[',sd.racikan_dosis,'] x ',sd.sale_qty),'<br> ')nama_obat",false)
-            ->from('farmasi.sale a')
-            ->join('left join','yanmed.services b','a.visit_id = b.visit_id and a.service_id = b.srv_id')
-            ->join('join','farmasi.sale_detail sd','sd.sale_id = a.sale_id')
-            ->join('join','farmasi.v_obat vo','sd.item_id = vo.item_id')
-            ->join('left join',"(
-									select sr.sale_id,sum(srd.total_return+sr.sr_embalase+sr.sr_services)::numeric as sr_total
-									from farmasi.sale_return sr
-									inner join farmasi.sale_return_detail srd on sr.sr_id = srd.sr_id
-									group by sr.sale_id
-								) sr","sr.sale_id=a.sale_id")
-            ->where(["a.visit_id" =>$visit_id])
-            ->groupBy("a.sale_id,a.date_act,a.sale_total,a.sale_total_returned,a.sale_services,a.sale_num,a.doctor_name,sr.sr_total")
-
-            ->all();
-        var_dump($data);die();
+            $sql="SELECT to_char(a.date_act, 'DD-MM-YYYY HH24:MM:SS') as tgl_sale,
+            (sale_total - COALESCE(sale_total_returned, 0))::numeric as sale_total,
+            sale_services::numeric, a.sale_num as nomor_resep, a.doctor_name as par_name,
+            sr.sr_total,
+            string_agg(concat(vo.item_name, '[', sd.racikan_dosis, '] x ', sd.sale_qty), '')nama_obat
+            FROM farmasi.sale a LEFT JOIN yanmed.services b ON a.visit_id = b.visit_id and a.service_id = b.srv_id
+            JOIN farmasi.sale_detail sd ON sd.sale_id = a.sale_id
+            JOIN farmasi.v_obat vo ON sd.item_id = vo.item_id
+            LEFT JOIN ( select sr.sale_id,sum(srd.total_return+sr.sr_embalase+sr.sr_services)::numeric as sr_total
+                from farmasi.sale_return sr
+                inner join farmasi.sale_return_detail srd on sr.sr_id = srd.sr_id group by sr.sale_id ) sr ON sr.sale_id=a.sale_id WHERE a.visit_id = ".$visit_id."
+            GROUP BY a.date_act, a.sale_total, a.sale_total_returned, a.sale_services, a.sale_num, a.doctor_name, sr.sr_total;";
+            $data=Yii::$app->db->createCommand($sql)->queryAll();
+        //var_dump($data);die();
 //
 ////        $data = $this->db->where("a.visit_id = '$visit_id'",null)
 ////            ->select("to_char(a.date_act,'DD-MM-YYYY HH24:MM:SS') as tgl_sale,(sale_total - COALESCE(sale_total_returned,0))::numeric as sale_total,sale_services::numeric,a.sale_num as nomor_resep,a.doctor_name as par_name,sr.sr_total,string_agg(concat(vo.item_name,'[',sd.racikan_dosis,'] x ',sd.sale_qty),'<br> ')nama_obat",false)
