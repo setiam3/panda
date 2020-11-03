@@ -1,6 +1,4 @@
-<?php foreach ($radiologi as $key => $value) {
-    var_dump($value);die();
-}?>
+
 <style type="text/css">
     .field_judul {
         font-weight: 900;

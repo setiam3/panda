@@ -57,7 +57,6 @@ return [
         'value'=>function($data){
             return json_encode($data->tagihan_pelayanan);
         }],
-
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', ],//status covid
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_id', ],
@@ -101,6 +100,4 @@ return [
         'value'=>function($data){
             return json_encode($data->hasil_penunjang);
         }],
-
-
 ];

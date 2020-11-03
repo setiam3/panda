@@ -119,7 +119,6 @@ $this->registerCss("
     </thead>
     <tbody>
     <?php
-//    var_dump($roomRi);die();
     foreach ($roomRi as $res):
         ?>
         <tr>
