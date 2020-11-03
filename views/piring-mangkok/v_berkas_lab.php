@@ -1,3 +1,4 @@
+
 <style type="text/css">
     .field_judul {
         font-weight: 900;
@@ -23,7 +24,7 @@
             <table border="0">
                 <tr>
                     <td></td>
-<!--                    <td><img src="--><?php //echo site_url('assets/global/img/logo_rs.png'); ?><!--" width="7%"/></td>-->
+                   <td><img src="<?php echo site_url('web/logo_rs.png'); ?>" width="7%"/></td>
                     <td><b>RSUD IBNU SINA KABUPATEN GRESIK</b><br>
                         <h5 style="font-size:10px;">JL. DR. WAHIDIN SH NO.243 B GRESIK - 0313951239<br>GRESIK</h5></td>
                 </tr>
@@ -44,61 +45,29 @@
         <td class="field_judul">2.</td>
         <td class="field_judul">Nomor Rekam Medik</td>
         <td>:</td>
-        <td ><?=$model['px_norm']?></td>
+        <td ><?=$model[0]['px_norm']?></td>
         <td class="field_judul">NIK</td>
         <td>:</td>
-        <td ><?=$model['px_noktp']?></td>
+        <td ><?=$model[0]['px_noktp']?></td>
     </tr>
     <tr>
         <td class="field_judul">3.</td>
         <td class="field_judul">Nama Pasien</td>
         <td>:</td>
-        <td colspan="4"><?=strtoupper($model['px_name'])?></td>
+        <td colspan="4"><?=strtoupper($model[0]['px_name'])?></td>
     </tr>
-    <!-- <tr>
-		<td class="field_judul">4.</td>
-		<td class="field_judul">NO SEP</td>
-		<td>:</td>
-		<td width="20%"><?php if($pasien->sep_no) echo $pasien->sep_no;?></td>
-		<td class="field_judul" width="18%">Tanggal SEP</td>
-		<td width="2%">:</td>
-		<td></td>
-	</tr> -->
-    <!-- <tr>
-		<td class="field_judul">4.</td>
-		<td class="field_judul">Jenis Perawatan</td>
-		<td>:</td>
-		<td colspan="4">
-		<?php
-    $jns_rawat = explode(',', $pasien->srv_type);
-    if(!in_array('RI', $jns_rawat)) {
-        if(in_array("RJ", $jns_rawat)) {
-            echo "PELAYANAN RAWAT JALAN";
-        }elseif(in_array("IGD", $jns_rawat)){
-            echo "PELAYANAN RAWAT DARURAT";
-        }
-    }else{
-        echo "PELAYANAN RAWAT INAP";
-    }
-    ?></td>
-	</tr>
-	<tr>
-		<td class="field_judul" valign="top">8.</td>
-		<td class="field_judul" valign="top">Unit</td>
-		<td valign="top">:</td>
-		<td colspan="4"><?=$pasien->nm_unit?></td>
-	</tr> -->
+
     <tr>
         <td class="field_judul">4.</td>
         <!-- <td class="field_judul">Tanggal Masuk</td>
 		<td>:</td>
-		<td><?php if($model['visit_date']) echo date('d-m-Y',strtotime($model['visit_date']))?></td> -->
+		<td><?php if($model[0]['visit_date']) echo date('d-m-Y',strtotime($model[0]['visit_date']))?></td> -->
         <td class="field_judul">Tanggal Keluar</td>
         <td>:</td>
-        <td><?php if($pasien['visit_end_date']) {
-                echo date('d-m-Y',strtotime($pasien['visit_end_date']));
-            }elseif (empty($pasien['visit_end_date']) and $pasien['srv_type'] == 'RJ') {
-                echo date('d-m-Y',strtotime($pasien['visit_date']));
+        <td><?php if($model[0]['visit_end_date']) {
+                echo date('d-m-Y',strtotime($model[0]['visit_end_date']));
+            }elseif (empty($model[0]['visit_end_date']) and $model[0]['srv_type'] == 'RJ') {
+                echo date('d-m-Y',strtotime($model[0]['visit_date']));
             }?></td>
     </tr>
     <!-- <tr>

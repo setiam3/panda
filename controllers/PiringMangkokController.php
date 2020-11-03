@@ -56,9 +56,7 @@ class PiringMangkokController extends \yii\web\Controller
 
                         //konek
                         $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-
-//                        $sep_no = $dt['response']['claim_number'];
-////                        var_dump($sep_no);die();
+                        $sep_no = $dt['response']['claim_number'];
 //                        if (!empty($sep_no)) {
 //
 ////                            Yii::app()->db->createCommand()
@@ -105,39 +103,39 @@ class PiringMangkokController extends \yii\web\Controller
                         }
                     }';
 //                    konek
-//                    $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-//
-//                    $metadata = $dt['metadata'];
-//                    if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
-//                        $hasil = $dt['response'];
-//                        $item["code"] = $metadata['code'];
-//                        $item['message'] = $metadata['message'];
-//                        $item["patient_id"] =$hasil["patient_id"];
-//                        $item["admission_id"] =$hasil["admission_id"];
-//                        $item["hospital_admission_id"] =$hasil["hospital_admission_id"];
-//
-//
-//                        $this->set_claim_data($datas,$nosep);
-//
-//                    }
-//                    else{
-//                        if($metadata['code'] == 400 && $metadata['error_no'] == "E2007"){
-//                            $this->set_claim_data($datas,$nosep);
-//                        }
-//                        else{
-//                            $item['code'] = $metadata['code'];
-//                            $item['message'] = $metadata['message'];
-//                            $item['error_no'] = $metadata['error_no'];
-//                            $item['norm'] = $data['duplicate'][0]["nomor_rm"];
-//
-//                            if (!empty($item['error_no'])) {
-//                                echo "Error - ".$item['error_no']." - ".$item['message'];
-//                            }
-//                            die;
-//                        }
-//                    }
+                    $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
-                    $this->set_claim_data($datas,$nosep);
+                    $metadata = $dt['metadata'];
+                    if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
+                        $hasil = $dt['response'];
+                        $item["code"] = $metadata['code'];
+                        $item['message'] = $metadata['message'];
+                        $item["patient_id"] =$hasil["patient_id"];
+                        $item["admission_id"] =$hasil["admission_id"];
+                        $item["hospital_admission_id"] =$hasil["hospital_admission_id"];
+
+
+                        $this->set_claim_data($datas,$nosep);
+
+                    }
+                    else{
+                        if($metadata['code'] == 400 && $metadata['error_no'] == "E2007"){
+                            $this->set_claim_data($datas,$nosep);
+                        }
+                        else{
+                            $item['code'] = $metadata['code'];
+                            $item['message'] = $metadata['message'];
+                            $item['error_no'] = $metadata['error_no'];
+                            $item['norm'] = $data['duplicate'][0]["nomor_rm"];
+
+                            if (!empty($item['error_no'])) {
+                                echo "Error - ".$item['error_no']." - ".$item['message'];
+                            }
+                            die;
+                        }
+                    }
+
+//                    $this->set_claim_data($datas,$nosep);
                 }
             }
         }
@@ -326,13 +324,13 @@ class PiringMangkokController extends \yii\web\Controller
 
             //conek server
 
-//            $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-//            $metadata = $dt['metadata'];
+            $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+            $metadata = $dt['metadata'];
 
-//            if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
-//                $this->actionUploadberkas($param[0]['visit_id']);
+            if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
+                $this->actionUploadberkas($param[0]['visit_id']);
 
-                $this->redirect(array('uploadberkas','visit_id' => $param[0]['visit_id']));
+//                $this->redirect(array('uploadberkas','visit_id' => $param[0]['visit_id']));
 
 //                insert table yanmed.transfer_inacbg
 //                Yii::app()->db->createCommand()
@@ -356,15 +354,15 @@ class PiringMangkokController extends \yii\web\Controller
 //                if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
 //                    $this->grouper_stage_1($param);
 //                }
-//            }
-//            else{
-////                $this->delete_claim($param);
-//                $item['code'] 	= $metadata['code'];
-//                $item['message'] = $metadata['message'];
-//                $item['error_no'] = $metadata['error_no'];
-//                echo "Error - ".$item['error_no']." - ".$item['message'];
-//                die;
-//            }
+            }
+            else{
+//                $this->delete_claim($param);
+                $item['code'] 	= $metadata['code'];
+                $item['message'] = $metadata['message'];
+                $item['error_no'] = $metadata['error_no'];
+                echo "Error - ".$item['error_no']." - ".$item['message'];
+                die;
+            }
 
         }
 
@@ -395,18 +393,18 @@ class PiringMangkokController extends \yii\web\Controller
         $pdf->content=$this->renderPartial('v_berkas_ruang_perawatan',['model'=>$model,'roomRi'=>$roomRi]);
 //        return $pdf->render();
 //        $content = $pdf->Output('','S');
-//        $base64=base64_encode($content);
-//        $request = '{
-//			    "metadata": {
-//			        "method": "file_upload",
-//			        "nomor_sep": "'.$model[0]['sep_no'].'",
-//			      "file_class": "ruang_rawat",
-//			      "file_name": "ruang_rawat_pasien.pdf"
-//			    },
-//			    "data": "'.$base64.'"
-//			}';
-//
-//        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+        $base64=base64_encode($pdf->content);
+        $request = '{
+			    "metadata": {
+			        "method": "file_upload",
+			        "nomor_sep": "'.$model[0]['sep_no'].'",
+			      "file_class": "ruang_rawat",
+			      "file_name": "ruang_rawat_pasien.pdf"
+			    },
+			    "data": "'.$base64.'"
+			}';
+
+        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
 
         /*upload berkass billing*/
@@ -417,19 +415,19 @@ class PiringMangkokController extends \yii\web\Controller
         $pdf = new Pdf;
         $pdf->content=$this->renderPartial('v_tagihan_pasien',['model'=>$model,'bea_tindakan'=>$bea_tindakan]);
 //        return $pdf->render();
-//
+
 //        $content = $pdf->Output('','S');
-//        $base64=base64_encode($content);
-//        $request = '{
-//		    "metadata": {
-//		        "method": "file_upload",
-//		        "nomor_sep": "'.$model[0]['sep_no'].'",
-//		      "file_class": "tagihan",
-//		      "file_name": "tagihan.pdf"
-//		    },
-//		    "data": "'.$base64.'"
-//		}';
-//        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+        $base64=base64_encode($pdf->content);
+        $request = '{
+		    "metadata": {
+		        "method": "file_upload",
+		        "nomor_sep": "'.$model[0]['sep_no'].'",
+		      "file_class": "tagihan",
+		      "file_name": "tagihan.pdf"
+		    },
+		    "data": "'.$base64.'"
+		}';
+        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
         /*obat*/
             $sql="SELECT to_char(a.date_act, 'DD-MM-YYYY HH24:MM:SS') as tgl_sale,
@@ -444,26 +442,109 @@ class PiringMangkokController extends \yii\web\Controller
                 from farmasi.sale_return sr
                 inner join farmasi.sale_return_detail srd on sr.sr_id = srd.sr_id group by sr.sale_id ) sr ON sr.sale_id=a.sale_id WHERE a.visit_id = ".$visit_id."
             GROUP BY a.date_act, a.sale_total, a.sale_total_returned, a.sale_services, a.sale_num, a.doctor_name, sr.sr_total;";
-            $data=Yii::$app->db->createCommand($sql)->queryAll();
+
+            $obat=Yii::$app->db->createCommand($sql)->queryAll();
+        $pdf = new Pdf;
+        $pdf->content=$this->renderPartial('v_berkas_obat',['model'=>$model,'obat'=>$obat]);
+//        return $pdf->render();
         //var_dump($data);die();
-//
-////        $data = $this->db->where("a.visit_id = '$visit_id'",null)
-////            ->select("to_char(a.date_act,'DD-MM-YYYY HH24:MM:SS') as tgl_sale,(sale_total - COALESCE(sale_total_returned,0))::numeric as sale_total,sale_services::numeric,a.sale_num as nomor_resep,a.doctor_name as par_name,sr.sr_total,string_agg(concat(vo.item_name,'[',sd.racikan_dosis,'] x ',sd.sale_qty),'<br> ')nama_obat",false)
-////            ->join('yanmed.services b','a.visit_id = b.visit_id and a.service_id = b.srv_id','left')
-////            ->join('farmasi.sale_detail sd','sd.sale_id = a.sale_id')
-////            ->join('farmasi.v_obat vo','sd.item_id = vo.item_id')
-////            ->join("(
-////									select sr.sale_id,sum(srd.total_return+sr.sr_embalase+sr.sr_services)::numeric as sr_total
-////									from farmasi.sale_return sr
-////									inner join farmasi.sale_return_detail srd on sr.sr_id = srd.sr_id
-////									group by sr.sale_id
-////								) sr","sr.sale_id=a.sale_id",'left')
-////
-////            ->group_by("a.date_act,a.sale_total,a.sale_total_returned,a.sale_services,a.sale_num,a.doctor_name,sr.sr_total")
-////            ->get('farmasi.sale a')->result_array();
-//
-//        $pdf = new Pdf;
-//        $pdf->content=$this->renderPartial('v_berkas_obat',['model'=>$model,'roomRi'=>$roomRi]);
+        $base64=base64_encode($pdf->content);
+        $request = '{
+		    "metadata": {
+		        "method": "file_upload",
+		        "nomor_sep": "'.$model[0]['sep_no'].'",
+		      "file_class": "resep_obat",
+		      "file_name": "resep_obat.pdf"
+		    },
+		    "data": "'.$base64.'"
+		}';
+        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+
+
+
+        $parent = '!=20';
+        $sql ="SELECT 
+				DISTINCT to_char(created_at,'DD-MM-YYYY HH24:MI:SS') as tanggal
+				from yanmed.checkup c
+				join yanmed.services s on c.service_id = s.srv_id
+				join yanmed.ms_check mc on c.ms_check_id = mc.idcheck
+				join yanmed.ms_groupcheck gc on mc.idgroup = gc.idgroup
+				where s.visit_id = $visit_id and parentgroup $parent
+				order by tanggal asc ";
+        $tgl_checkup=Yii::$app->db->createCommand($sql)->queryAll();
+
+        $all1.= "
+            <tr>
+                <td width='5%' style='border-top: 0px; border-left: 0px;border-bottom: 0px;'></td><td align='center'>Pemeriksaan</td><td></td>";
+        foreach ($tgl_checkup as $key => $tgl) {
+            $all1.="<td align='center'>".date('d-m-Y', strtotime($tgl['tanggal']))."<br>".date('H:i:s', strtotime($tgl['tanggal']))."</td>";
+        }
+        $all1.="</tr>";
+
+
+        $sql ="SELECT bill_name ,namecheck, ms_check_id
+				from yanmed.checkup c
+				join yanmed.ms_check mc on c.ms_check_id = mc.idcheck
+				join yanmed.services s on c.service_id = s.srv_id 
+				join yanmed.visit v on s.visit_id = v.visit_id
+				join yanmed.billing b on c.billing_id = b.billing_id
+				join yanmed.ms_tarif mt on b.tarif_id = mt.tarif_id
+				join yanmed.ms_bill bil on mt.bill_id = bil.bill_id
+				join yanmed.ms_groupcheck gc on mc.idgroup = gc.idgroup
+				where v.visit_id = $visit_id and parentgroup $parent
+				group by bill_name ,namecheck, ms_check_id
+				order by bill_name asc ";
+        $nama_pemeriksaan=Yii::$app->db->createCommand($sql)->queryAll();
+
+        $sql ="SELECT 
+				concat(to_char(created_at,'DD-MM-YYYY HH24:MI:SS'),'-',ms_check_id) idbaru,
+				result
+				from yanmed.checkup c
+				join yanmed.ms_check mc on c.ms_check_id = mc.idcheck
+				join yanmed.services s on c.service_id = s.srv_id 
+				join yanmed.visit v on s.visit_id = v.visit_id
+				join yanmed.billing b on c.billing_id = b.billing_id
+				join yanmed.ms_tarif mt on b.tarif_id = mt.tarif_id
+				join yanmed.ms_bill bil on mt.bill_id = bil.bill_id
+				join yanmed.ms_groupcheck gc on mc.idgroup = gc.idgroup
+				where v.visit_id = $visit_id 
+				and parentgroup $parent ";
+        $data_penunjang=Yii::$app->db->createCommand($sql)->queryAll();
+
+
+
+        foreach ($nama_pemeriksaan as $name) {
+
+            $all = "
+            <tr><td  style='border-top: 0px; border-left: 0px;border-bottom: 0px;'></td><td>&nbsp;&nbsp;".$name['namecheck']."<td>";
+            foreach ($tgl_checkup as $value) {
+                $hasil = isset($data_penunjang['idbaru'][$value['tanggal'].'-'.$name['ms_check_id']]) ? $data_penunjang['idbaru'][$value['tanggal'].'-'.$name['ms_check_id']] : "";
+
+                $all.="<td align='center'>".$hasil."</td>";
+
+            }
+            $all ="</tr>";
+        }
+
+        $data['all2']= $all;
+        $data['all1']= $all1;
+
+
+        $pdf = new Pdf;
+        $pdf->content=$this->renderPartial('v_berkas_lab',['model'=>$model,'tgl_checkup'=>$tgl_checkup,'data'=>$data]);
+//        return $pdf->render();
+        $base64=base64_encode($pdf->content);
+        $request = '{
+		    "metadata": {
+		        "method": "file_upload",
+		        "nomor_sep": "'.$model[0]['sep_no'].'",
+		      "file_class": "laboratorium",
+		      "file_name": "laboratorium.pdf"
+		    },
+		    "data": "'.$base64.'"
+		}';
+        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+
 
         /*radiologi*/
     $sql = "SELECT
@@ -488,17 +569,18 @@ class PiringMangkokController extends \yii\web\Controller
         $pdf->content=$this->renderPartial('v_berkas_radiologi',['model'=>$model,'radiologi'=>$radiologi]);
 //        return $pdf->render();
 //        $content = $pdf->Output('','S');
-//        $base64=base64_encode($content);
-//        $request = '{
-//		    "metadata": {
-//		        "method": "file_upload",
-//		        "nomor_sep": "'.$model[0]['sep_no'].'",
-//		      "file_class": "radiologi",
-//		      "file_name": "radiologi.pdf"
-//		    },
-//		    "data": "'.$base64.'"
-//		}';
-//        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+        $base64=base64_encode($pdf->content);
+        $request = '{
+		    "metadata": {
+		        "method": "file_upload",
+		        "nomor_sep": "'.$model[0]['sep_no'].'",
+		      "file_class": "radiologi",
+		      "file_name": "radiologi.pdf"
+		    },
+		    "data": "'.$base64.'"
+		}';
+        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+        return $act;
     }
     function delete_claim($param){
         $request = '{
@@ -506,7 +588,7 @@ class PiringMangkokController extends \yii\web\Controller
 					"method":"delete_claim"
 				},
 				"data": {
-					"nomor_sep":"'.$param['sjp_no'].'",
+					"nomor_sep":"'.$param[0]['sjp_no'].'",
 					"coder_nik": "'.$param['employee_nik'].'"
 
 				}
