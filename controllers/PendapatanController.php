@@ -16,6 +16,16 @@ class PendapatanController extends \yii\web\Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    public function actionsentwa()
+    {
+        $where='';
+        $searchModel = new MvPendapatanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$where);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
     public function actionGeneratecol(){
         $model=(new MvPendapatan)->attributes;
         //echo "[[";

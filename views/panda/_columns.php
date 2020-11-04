@@ -152,21 +152,64 @@ return [
             return json_encode($data->hasil_penunjang);
         }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tanggal rapit',
-        'value'=>function($data){
-            return json_encode($data->visit_date);
-        }],
-
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil',
-        'value'=>function($data){
-    foreach ($data->hasil_penunjang as $row){
-
-//        var_dump($row['f3']);
-        if (stripos($row['f3'],'COVID') !== false){
-            $s[] = $row['f4'];
-        }
-    }
-            return json_encode($s);
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tanggal rapit',
+//        'value'=>function($data){
 //            return json_encode($data->visit_date);
-        }],
+//        }],
+//
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil',
+//        'value'=>function($data){
+//            $s=[];
+//        foreach ($data->hasil_penunjang as $row){
+//        if (stripos($row['f3'],'COVID') !== false){
+//            $s[] = $row['f4'];
+//        }
+////        else{
+////            $s[] ="null";
+////        }
+//    }
+//            return json_encode($s);
+////            return json_encode($data->visit_date);
+//        }],
+//
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tanggal swab',
+//        'value'=>function($data){
+//            return json_encode($data->visit_date);
+//        }],
+//
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil',
+//        'value'=>function($data){
+//    $s=[];
+//            foreach ($data->hasil_penunjang as $row){
+//                if (stripos($row['f3'],'swab') !== false){
+//                    $s[] = $row['f4'];
+//                }
+////                else{
+////                    $s[] ="null";
+////                }
+//            }
+//            return json_encode($s);
+////            return json_encode($data->visit_date);
+//        }],
+
+    [
+        'class' => 'yii\grid\ActionColumn',
+        'template' => '{view}',
+        'buttons' => [
+
+            'view' => function ($url, $model) {
+                return  Html::a('<span class="glyphicon glyphicon-comment"></span> Sent WA', $url,
+                    [ 'title' => Yii::t('app', 'Sent WA'), 'class'=>'btn btn-primary btn-md', 'target' => '_blank', 'data' => ['pjax' => '0'], 'id'=>'sentwa']) ;
+            },
+        ],
+
+
+        'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view') {
+                $id = $model->visit_id;
+                $url = \yii\helpers\Url::toRoute(['panda/sentwa', 'id' => $model->visit_id]);
+                return $url;
+            }
+        },
+    ],
 ];
