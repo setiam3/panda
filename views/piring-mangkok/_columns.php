@@ -79,10 +79,18 @@ return [
             return json_encode($data->ruang_rawat_px);
         }
     ],
+
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang rawat px',
+        'value'=>function($data){
+            return json_encode($data->ruang_rawat_px);
+        }
+    ],
+
+
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'class_id', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_cause_id', ],
-//
+
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px', 'format'=>'html'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tindakan_px', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Kelas pelayanan',

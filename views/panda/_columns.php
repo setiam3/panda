@@ -32,10 +32,25 @@ return [
 //
 //        }],
 
-
+    [ 'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'visit_date',
+        'filterType' => GridView::FILTER_DATE_RANGE,
+        'filterWidgetOptions' => ([
+            'attribute' => 'only_date',
+            'presetDropdown' => true,
+            'convertFormat' => false,
+            'pluginOptions' => [
+                'separator' => ' - ',
+                'format' => 'YYYY-MM-DD',
+                'locale' => [
+                    'format' => 'YYYY-MM-DD'
+                ],
+            ],
+        ]),
+    ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', ],
-    //tgl lahir
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_sex', ],
@@ -43,19 +58,59 @@ return [
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_id', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_name', ],//jaminan
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa primer',
         'value'=>function($data){
-            return json_encode($data->diagnosa_px);
+            foreach ($data->diagnosa_px as $row){
+                if (!empty($row)){
+                   if ($row['f3'] == '1'){
+                       $s[] = $row['f2'];
+                   }
+                }else{
+                    $s[]='null';
+                }
+            }
+            return json_encode($s);
         }],
+
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa Sekunder',
+        'value'=>function($data){
+            $s=[];
+            foreach ($data->diagnosa_px as $row){
+                if (!empty($row)){
+                    if ($row['f3'] != '1'){
+                        $s[] = $row['f2'];
+                    }
+                }else{
+                    $s[]='null';
+                }
+            }
+            return json_encode($s);
+        }],
+
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'list_obat',
         'value'=>function($data){
-            return json_encode($data->list_obat);
+            foreach ($data->list_obat as $row){
+                if (!empty($row)){
+                    $s[] = $row['f2'];
+                }else{
+                    $s[]='null';
+                }
+            }
+            return implode($s);
+//            return json_encode($data->list_obat);
         }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_date', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tagihan_pelayanan',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tagihan_pelayanan','format'=>'html',
         'value'=>function($data){
-            return json_encode($data->tagihan_pelayanan);
+            foreach ($data->tagihan_pelayanan as $row){
+                if (!empty($row)){
+                    $s[] = $row['f2'] ." ". $row['f3'] . "<br>";
+                }else{
+                    $s[]='null';
+                }
+            }
+            return implode($s);
+//            return json_encode($data->tagihan_pelayanan);
         }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', ],//status covid
 
@@ -80,10 +135,6 @@ return [
         'value'=>function($data){
             return json_encode($data->tindakan_px);
         }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tagihan_pelayanan',
-        'value'=>function($data){
-            return json_encode($data->tagihan_pelayanan);
-        }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_doctor_name', ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_id', ],
 
@@ -99,5 +150,23 @@ return [
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_penunjang',
         'value'=>function($data){
             return json_encode($data->hasil_penunjang);
+        }],
+
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tanggal rapit',
+        'value'=>function($data){
+            return json_encode($data->visit_date);
+        }],
+
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil',
+        'value'=>function($data){
+    foreach ($data->hasil_penunjang as $row){
+
+//        var_dump($row['f3']);
+        if (stripos($row['f3'],'COVID') !== false){
+            $s[] = $row['f4'];
+        }
+    }
+            return json_encode($s);
+//            return json_encode($data->visit_date);
         }],
 ];

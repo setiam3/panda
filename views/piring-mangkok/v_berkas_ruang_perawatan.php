@@ -63,7 +63,7 @@ $this->registerCss("
             <table border="0">
                 <tr>
                     <td></td>
-                    <td><img src="<?php echo Yii::getAlias('@web').'logo_rs.png' ?>" width="7%"/></td>
+                    <td><img src="<?php echo Yii::getAlias('@web').'/logo_rs.png' ?>" width="7%"/></td>
                     <td><b>RSUD IBNU SINA KABUPATEN GRESIK</b><br>
                         <h5 style="font-size:10px;">JL. DR. WAHIDIN SH NO.243 B GRESIK - 0313951239<br>GRESIK</h5></td>
                 </tr>

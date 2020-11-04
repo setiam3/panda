@@ -473,13 +473,13 @@ class PiringMangkokController extends \yii\web\Controller
 				order by tanggal asc ";
         $tgl_checkup=Yii::$app->db->createCommand($sql)->queryAll();
 
-        $all1.= "
+        $all1 = "
             <tr>
                 <td width='5%' style='border-top: 0px; border-left: 0px;border-bottom: 0px;'></td><td align='center'>Pemeriksaan</td><td></td>";
         foreach ($tgl_checkup as $key => $tgl) {
-            $all1.="<td align='center'>".date('d-m-Y', strtotime($tgl['tanggal']))."<br>".date('H:i:s', strtotime($tgl['tanggal']))."</td>";
+            $all1 ="<td align='center'>".date('d-m-Y', strtotime($tgl['tanggal']))."<br>".date('H:i:s', strtotime($tgl['tanggal']))."</td>";
         }
-        $all1.="</tr>";
+        $all1 ="</tr>";
 
 
         $sql ="SELECT bill_name ,namecheck, ms_check_id
@@ -653,7 +653,6 @@ class PiringMangkokController extends \yii\web\Controller
         $data = json_decode($valueponse, true);
         return $data;
     }
-
     function mc_encrypt($data, $key){
         /// make binary representasion of $key
         $key = hex2bin($key);
@@ -679,7 +678,6 @@ class PiringMangkokController extends \yii\web\Controller
         $encoded = chunk_split(base64_encode($signature . $iv . $encrypted));
         return $encoded;
     }
-
     function mc_decrypt($str, $strkey){
         /// make binary representation of $key
         $key = hex2bin($strkey);

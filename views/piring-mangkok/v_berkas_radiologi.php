@@ -1,3 +1,24 @@
+<?php
+$this->registerCss("
+.field_judul {
+        font-weight: 900;
+    }
+    .tabel{
+        border-collapse:collapse;
+        width:100%;}
+    .tabel th{
+        color:#000;
+        border:#000000 solid 1px;
+        padding:3px;
+        font-size: 14px;
+    }
+    .tabel td{
+        border:#000000 solid 1px;
+        padding:3px;
+        font-size: 12px;
+    }
+");
+?>
 
 <style type="text/css">
     .field_judul {
@@ -18,6 +39,7 @@
         font-size: 12px;
     }
 </style>
+
 <table class="satu" border="0" width="100%">
     <tr>
         <td>
