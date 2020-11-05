@@ -58,7 +58,7 @@ class Panda extends \yii\db\ActiveRecord
         return [
             [['visit_id', 'px_id', 'surety_id', 'visit_status', 'class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'default', 'value' => null],
             [['visit_id', 'px_id', 'surety_id', 'visit_status', 'class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'integer'],
-            [['visit_date', 'visit_end_date', 'ruang_rawat_px', 'kelas_pelayanan', 'diagnosa_px', 'tindakan_px', 'tagihan_pelayanan', 'unit_layanan', 'hasil_penunjang', 'list_obat','px_birthdate'], 'safe'],
+            [['visit_date', 'visit_end_date', 'ruang_rawat_px','ruang_rawat_px2', 'kelas_pelayanan', 'diagnosa_px', 'tindakan_px', 'tagihan_pelayanan', 'unit_layanan', 'hasil_penunjang', 'list_obat','px_birthdate'], 'safe'],
             [['px_address', 'jns_layanan', 'visit_end_doctor_name'], 'string'],
             [['px_norm'], 'string', 'max' => 10],
             [['px_noktp', 'pxsurety_no', 'status_grouper', 'grouper_code'], 'string', 'max' => 20],
@@ -89,6 +89,7 @@ class Panda extends \yii\db\ActiveRecord
             'pxsurety_no' => 'Pxsurety No',
             'visit_end_date' => 'tanggal keluar',
             'ruang_rawat_px' => 'Ruang Rawat',
+            'ruang_rawat_px2' => 'Ruang Rawat2',
             'jns_layanan' => 'Jns Layanan',
             'class_id' => 'Class ID',
             'visit_end_cause_id' => 'Visit End Cause ID',

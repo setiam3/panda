@@ -35,6 +35,7 @@ foreach ($model as $data){
 //    }
 //
 // CSS;
+
 $this->registerCss("
        .field_judul {
             font-weight: 900;
@@ -54,6 +55,7 @@ $this->registerCss("
             font-size: 12px;
         }
     ");
+
 
 ?>
 
@@ -75,30 +77,30 @@ $this->registerCss("
 <p align="center" style="padding-top:0px; margin-top:0px; font-size:10px;"></p>
 <table width="100%" style="font-size:12px;">
     <tr>
-        <td class="field_judul" width="4%">1.</td>
-        <td class="field_judul" width="20%">Nama Rumah Sakit</td>
+        <td style="font-weight: 900;" class="field_judul" width="4%">1.</td>
+        <td style="font-weight: 900;" class="field_judul" width="20%">Nama Rumah Sakit</td>
         <td width="2%">:</td>
         <td colspan="4">RSUD IBNU SINA KABUPATEN GRESIK</td>
     </tr>
     <tr>
-        <td class="field_judul">2.</td>
-        <td class="field_judul">Nomor Rekam Medik</td>
+        <td style="font-weight: 900;" class="field_judul">2.</td>
+        <td style="font-weight: 900;" class="field_judul">Nomor Rekam Medik</td>
         <td>:</td>
         <td ><?=$model[0]['px_norm']?></td>
-        <td class="field_judul">NIK</td>
+        <td style="font-weight: 900;" class="field_judul">NIK</td>
         <td>:</td>
         <td ><?=$model[0]['px_noktp']?></td>
     </tr>
     <tr>
-        <td class="field_judul">3.</td>
-        <td class="field_judul">Nama Pasien</td>
+        <td style="font-weight: 900;" class="field_judul">3.</td>
+        <td style="font-weight: 900;" class="field_judul">Nama Pasien</td>
         <td>:</td>
         <td colspan="4"><?=strtoupper($model[0]['px_name'])?></td>
     </tr>
 
     <tr>
-        <td class="field_judul">4.</td>
-        <td class="field_judul">Tanggal Keluar</td>
+        <td style="font-weight: 900;" class="field_judul">4.</td>
+        <td style="font-weight: 900;" class="field_judul">Tanggal Keluar</td>
         <td>:</td>
         <td><?php if($model[0]['visit_end_date']) {
                 echo date('d-m-Y',strtotime($model[0]['visit_end_date']));
@@ -109,12 +111,22 @@ $this->registerCss("
 
 </table>
 <br>
-<table class="tabel">
+<table class="tabel" style="border-collapse:collapse;
+            width:100%;">
     <thead>
     <tr>
-        <th >Ruang Perawatan</th>
-        <th >Jenis/Periode Rawat</th>
-        <th >Lama Perawatan</th>
+        <th style="color:#000;
+            border:#000000 solid 1px;
+            padding:3px;
+            font-size: 14px;">Ruang Perawatan</th>
+        <th style="color:#000;
+            border:#000000 solid 1px;
+            padding:3px;
+            font-size: 14px;">Jenis/Periode Rawat</th>
+        <th style="color:#000;
+            border:#000000 solid 1px;
+            padding:3px;
+            font-size: 14px;">Lama Perawatan</th>
     </tr>
     </thead>
     <tbody>
@@ -122,15 +134,27 @@ $this->registerCss("
     foreach ($roomRi as $res):
         ?>
         <tr>
-            <td><?=$res['unit_name']?></td>
+            <td style="border:#000000 solid 1px;
+            padding:3px;
+            font-size: 12px;"><?=$res['unit_name']?></td>
             <?php
             if ($res['srv_type'] === 'RI' && !empty($res['billingroom_start_date'])) {
                 ?>
-                <td><?=$res['room_name'].'['.$res['bed_no'].']'.'<br> Tgl: '.date('d-m-Y',strtotime($res['billingroom_start_date'])).'/'.date('d-m-Y',strtotime($res['billingroom_end_date']))?></td>
-                <td align="center"><?=strtoupper($res['billingroom_qty']).' hari'?></td>
+                <td style="border:#000000 solid 1px;
+            padding:3px;
+            font-size: 12px;"><?=$res['room_name'].'['.$res['bed_no'].']'.'<br> Tgl: '.date('d-m-Y',strtotime($res['billingroom_start_date'])).'/'.date('d-m-Y',strtotime($res['billingroom_end_date']))?></td>
+                <td style="border:#000000 solid 1px;
+            padding:3px;
+            font-size: 12px;" align="center"><?=strtoupper($res['billingroom_qty']).' hari'?></td>
                 <?php
             }else{
-                echo "<td>". $res['unit_name']."[".date('d-m-Y',strtotime($res['srv_date']))."]</td><td align=\"center\">-</td>";
+                echo "<td
+                style='border:#000000 solid 1px;
+            padding:3px;
+            font-size: 12px;'
+                >". $res['unit_name']."[".date('d-m-Y',strtotime($res['srv_date']))."]</td><td style='border:#000000 solid 1px;
+                padding:3px;
+                font-size: 12px;' align=\"center\">-</td>";
             }
             ?>
         </tr>
