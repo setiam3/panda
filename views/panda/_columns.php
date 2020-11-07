@@ -3,6 +3,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 
+
 return [
     [
         'header'=>Html::checkbox('selection_all', false, ['class'=>'select-on-check-all', 'value'=>1, 'onclick'=>'$(".kv-row-checkbox").prop("checked", $(this).is(":checked"));']),
@@ -105,39 +106,18 @@ return [
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'total los',
         'value'=>function($data){
-//             $tanggal1 = new DateTime("2011-07-06");
-// $tanggal2 = new DateTime();
-
-// $perbedaan = $tanggal2->diff($tanggal1);
-
-// return $perbedaan->d;
-$tanggal1 = new DateTime($data->visit_date);
-$tanggal2 = new DateTime($data->visit_end_date);
-$perbedaan[] = $tanggal2->diff($tanggal1);
-
-            // $splitmasuk = str_split($data->visit_date, 10);
-            // $splitkeluar = str_split($data->visit_end_date, 10);
-            // foreach($splitmasuk as $masuk){
-            //     foreach($splitkeluar as $keluar){
-            //         $tanggal1 = new DateTime($masuk);
-            //         $tanggal2 = new DateTime($keluar);
-            //         $perbedaan[] = $tanggal2->diff($tanggal1);
-            //     }
-            //     return json_encode($perbedaan);
-            // }
+            $tanggal1 = new DateTime($data->visit_date);
+            $tanggal2 = new DateTime($data->visit_end_date);
+            $perbedaan[] = $tanggal2->diff($tanggal1);
             return json_encode($perbedaan[0]->d);
-            // return json_encode($perbedaan->d);
-    // $los = $data->visit_date - $data->visit_end_date;
-
+            
 
         }],
 
         [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jenis isolasi',
         'value'=>function($data){
-            // $datetime = new DateTime($myvalue);
     $masuk = $data->visit_date;
     $keluar = $data->visit_end_date;
-    // $los = $data->visit_date - $data->visit_end_date;
             return json_encode($keluar);
         }],
 
@@ -429,9 +409,7 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
         'value'=>function($data){
             $s=[];
             foreach($data->ruang_rawat_px as $row){
-//                if(stripos($row['f2'],'ruangan') !== false){
                     $s[] = $row['f3']. ': ' .$row['f6'];
-//                }
             }
             return json_encode($s);
         }],
@@ -453,12 +431,10 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
         ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'pelayanan darah',
         'value'=>function($data){
             $s=[];
-            // foreach($data->unit_layanan as $row){
                 if ($data->unit_layanan[0]['f2'] == 'bank darah'){
                     foreach($data->tindakan_px as $row){
                         $s[]=$row['f2'];
                     }
-                // }
 
 
             }
@@ -484,7 +460,6 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
                     $s[] = $row['f4'];
                 }
             }
-//            var_dump($s[0]);
             return json_encode($s);
         }],
 
