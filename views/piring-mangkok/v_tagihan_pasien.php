@@ -1,23 +1,23 @@
 
-<style type="text/css">
-    .field_judul {
-        font-weight: 900;
-    }
-    .tabel{
-        border-collapse:collapse;
-        width:100%;}
-    .tabel th{
-        color:#000;
-        border:#000000 solid 1px;
-        padding:3px;
-        font-size: 14px;
-    }
-    .tabel td{
-        border:#000000 solid 1px;
-        padding:3px;
-        font-size: 12px;
-    }
-</style>
+<!--<style type="text/css">-->
+<!--    .field_judul {-->
+<!--        font-weight: 900;-->
+<!--    }-->
+<!--    .tabel{-->
+<!--        border-collapse:collapse;-->
+<!--        width:100%;}-->
+<!--    .tabel th{-->
+<!--        color:#000;-->
+<!--        border:#000000 solid 1px;-->
+<!--        padding:3px;-->
+<!--        font-size: 14px;-->
+<!--    }-->
+<!--    .tabel td{-->
+<!--        border:#000000 solid 1px;-->
+<!--        padding:3px;-->
+<!--        font-size: 12px;-->
+<!--    }-->
+<!--</style>-->
 <table class="satu" border="0" width="100%">
     <tr>
         <td>
@@ -83,6 +83,6 @@
         <td></td>
         <td><strong>Total Biaya Rumah Sakit</strong></td>
         <td colspan="4" align="right">:</td>
-        <td><strong><?=number_format($rs_bea['tagihan_pasien'],0,',','.')?></strong></td>
+        <td><strong><?php echo number_format($rs_bea['tagihan_pasien'],0,',','.')?></strong></td>
     </tr>
 </table>

@@ -25,7 +25,7 @@ class PandaSearch extends Panda
                 'pxsurety_no',
                 'visit_end_date',
                 'ruang_rawat_px',
-                'ruang_rawat_px2',
+//                'ruang_rawat_px2',
                 'jns_layanan',
                 'class_id',
                 'visit_end_cause_id',
@@ -95,7 +95,7 @@ class PandaSearch extends Panda
 //            ->andFilterWhere(['like', 'visit_end_date', $this->visit_end_date])
             ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
             ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px])
-            ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px2])
+//            ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px2])
             ->andFilterWhere(['like', 'jns_layanan', $this->jns_layanan])
             ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
             ->andFilterWhere(['like', 'diagnosa_px', $this->diagnosa_px])

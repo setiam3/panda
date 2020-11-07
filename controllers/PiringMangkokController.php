@@ -382,7 +382,7 @@ class PiringMangkokController extends \yii\web\Controller
     public function actionUploadberkas($visit_id)
     {
         $model = PiringMangkok::find()->where(['visit_id'=>$visit_id])->all();
-        
+
         $roomRi = (new \yii\db\Query())
             ->select(['mu.unit_name',
                 'r.room_name',
@@ -426,20 +426,20 @@ class PiringMangkokController extends \yii\web\Controller
 
         $pdf = new Pdf;
         $pdf->content=$this->renderPartial('v_tagihan_pasien',['model'=>$model,'bea_tindakan'=>$bea_tindakan]);
-       return $pdf->render();
+//       return $pdf->render();
 
 //        $content = $pdf->Output('','S');
-        $base64=base64_encode($pdf->content);
-        $request = '{
-		    "metadata": {
-		        "method": "file_upload",
-		        "nomor_sep": "'.$model[0]['sep_no'].'",
-		      "file_class": "tagihan",
-		      "file_name": "tagihan.pdf"
-		    },
-		    "data": "'.$base64.'"
-		}';
-        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+//        $base64=base64_encode($pdf->content);
+//        $request = '{
+//		    "metadata": {
+//		        "method": "file_upload",
+//		        "nomor_sep": "'.$model[0]['sep_no'].'",
+//		      "file_class": "tagihan",
+//		      "file_name": "tagihan.pdf"
+//		    },
+//		    "data": "'.$base64.'"
+//		}';
+//        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
         /*obat*/
             $sql="SELECT to_char(a.date_act, 'DD-MM-YYYY HH24:MM:SS') as tgl_sale,
@@ -460,17 +460,17 @@ class PiringMangkokController extends \yii\web\Controller
         $pdf->content=$this->renderPartial('v_berkas_obat',['model'=>$model,'obat'=>$obat]);
 //        return $pdf->render();
         //var_dump($data);die();
-        $base64=base64_encode($pdf->content);
-        $request = '{
-		    "metadata": {
-		        "method": "file_upload",
-		        "nomor_sep": "'.$model[0]['sep_no'].'",
-		      "file_class": "resep_obat",
-		      "file_name": "resep_obat.pdf"
-		    },
-		    "data": "'.$base64.'"
-		}';
-        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+//        $base64=base64_encode($pdf->content);
+//        $request = '{
+//		    "metadata": {
+//		        "method": "file_upload",
+//		        "nomor_sep": "'.$model[0]['sep_no'].'",
+//		      "file_class": "resep_obat",
+//		      "file_name": "resep_obat.pdf"
+//		    },
+//		    "data": "'.$base64.'"
+//		}';
+//        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
 
 
@@ -532,7 +532,7 @@ class PiringMangkokController extends \yii\web\Controller
             foreach ($tgl_checkup as $value) {
                 $hasil = isset($data_penunjang['idbaru'][$value['tanggal'].'-'.$name['ms_check_id']]) ? $data_penunjang['idbaru'][$value['tanggal'].'-'.$name['ms_check_id']] : "";
 
-                $all.="<td align='center'>".$hasil."</td>";
+                $all="<td align='center'>".$hasil."</td>";
 
             }
             $all ="</tr>";
@@ -545,17 +545,17 @@ class PiringMangkokController extends \yii\web\Controller
         $pdf = new Pdf;
         $pdf->content=$this->renderPartial('v_berkas_lab',['model'=>$model,'tgl_checkup'=>$tgl_checkup,'data'=>$data]);
 //        return $pdf->render();
-        $base64=base64_encode($pdf->content);
-        $request = '{
-		    "metadata": {
-		        "method": "file_upload",
-		        "nomor_sep": "'.$model[0]['sep_no'].'",
-		      "file_class": "laboratorium",
-		      "file_name": "laboratorium.pdf"
-		    },
-		    "data": "'.$base64.'"
-		}';
-        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+//        $base64=base64_encode($pdf->content);
+//        $request = '{
+//		    "metadata": {
+//		        "method": "file_upload",
+//		        "nomor_sep": "'.$model[0]['sep_no'].'",
+//		      "file_class": "laboratorium",
+//		      "file_name": "laboratorium.pdf"
+//		    },
+//		    "data": "'.$base64.'"
+//		}';
+//        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
 
         /*radiologi*/
@@ -580,19 +580,19 @@ class PiringMangkokController extends \yii\web\Controller
         $pdf = new Pdf;
         $pdf->content=$this->renderPartial('v_berkas_radiologi',['model'=>$model,'radiologi'=>$radiologi]);
 //        return $pdf->render();
-//        $content = $pdf->Output('','S');
-        $base64=base64_encode($pdf->content);
-        $request = '{
-		    "metadata": {
-		        "method": "file_upload",
-		        "nomor_sep": "'.$model[0]['sep_no'].'",
-		      "file_class": "radiologi",
-		      "file_name": "radiologi.pdf"
-		    },
-		    "data": "'.$base64.'"
-		}';
-        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-        return $act;
+////        $content = $pdf->Output('','S');
+//        $base64=base64_encode($pdf->content);
+//        $request = '{
+//		    "metadata": {
+//		        "method": "file_upload",
+//		        "nomor_sep": "'.$model[0]['sep_no'].'",
+//		      "file_class": "radiologi",
+//		      "file_name": "radiologi.pdf"
+//		    },
+//		    "data": "'.$base64.'"
+//		}';
+//        $act = $this->connect_inacbg($request,$model->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+//        ret;urn $act
     }
     function delete_claim($param){
         $request = '{

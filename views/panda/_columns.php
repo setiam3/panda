@@ -107,9 +107,9 @@ return [
         'value'=>function($data){
 //             $tanggal1 = new DateTime("2011-07-06");
 // $tanggal2 = new DateTime();
- 
+
 // $perbedaan = $tanggal2->diff($tanggal1);
- 
+
 // return $perbedaan->d;
 $tanggal1 = new DateTime($data->visit_date);
 $tanggal2 = new DateTime($data->visit_end_date);
@@ -128,7 +128,7 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
             return json_encode($perbedaan[0]->d);
             // return json_encode($perbedaan->d);
     // $los = $data->visit_date - $data->visit_end_date;
-            
+
 
         }],
 
@@ -141,9 +141,9 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
             return json_encode($keluar);
         }],
 
-        [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang_rawat_px2',
+        [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang_rawat_px',
         'value'=>function($data){
-            return json_encode($data->ruang_rawat_px2);
+            return json_encode($data->ruang_rawat_px);
         }],
 
         [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tanggal rapit',
@@ -326,7 +326,7 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
             }
             return json_encode($s);
         }],
-        
+
 
         ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'Mobil',
         'value'=>function($data){
@@ -357,9 +357,23 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
             $s=[];
             for($i=0;$i<count($data->tagihan_pelayanan);$i++){
                 $s[] = $data->tagihan_pelayanan[$i]['f3'];
-                
+
             }
             return json_encode(array_sum($s));
+        }],
+
+        ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'prosedur non bedah',
+        'value'=>function($data){
+            
+            $s=[];
+            foreach($data->billing_inacbg as $row){
+                
+                if($row['f2'] == "prosedur_non_bedah"){
+                    $s=$row['f3'];
+                }
+
+            }
+            return json_encode($s);
         }],
 
         ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'tenaga ahli',
@@ -399,6 +413,7 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
             }
             return json_encode($s);
         }],
+    //kamar
         ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruangan',
         'value'=>function($data){
             $s=[];
@@ -410,13 +425,68 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
             return json_encode($s);
         }],
 
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'akomodasi',
+        'value'=>function($data){
+            $s=[];
+            foreach($data->ruang_rawat_px as $row){
+//                if(stripos($row['f2'],'ruangan') !== false){
+                    $s[] = $row['f3']. ': ' .$row['f6'];
+//                }
+            }
+            return json_encode($s);
+        }],
+
+        ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'konsultasi',
+        'value'=>function($data){
+            
+            $s=[];
+            foreach($data->billing_inacbg as $row){
+                
+                if($row['f2'] == "konsultasi"){
+                    $s=$row['f3'];
+                }
+
+            }
+            return json_encode($s);
+        }],
+
+        ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'pelayanan darah',
+        'value'=>function($data){
+            $s=[];
+            // foreach($data->unit_layanan as $row){
+                if ($data->unit_layanan[0]['f2'] == 'bank darah'){
+                    foreach($data->tindakan_px as $row){
+                        $s[]=$row['f2'];
+                    }
+                // }
 
 
+            }
+            return json_encode($s);
+        }],
 
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil laborat',
+        'value'=>function($data){
+            $s=[];
+            foreach($data->hasil_penunjang as $row){
+                if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
+                    $s[] = $row['f4'];
+                }
+            }
+            return json_encode($s);
+        }],
 
-
-
-
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil radiologi', 'format'=>'html',
+        'value'=>function($data){
+            $s=[];
+            foreach($data->hasil_penunjang as $row){
+                if($row['f2'] == "RADIOLOGI"){
+                    $s[] = $row['f4'];
+                }
+            }
+//            var_dump($s[0]);
+            return json_encode($s);
+        }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'list_obat',
         'value'=>function($data){
@@ -430,67 +500,16 @@ $perbedaan[] = $tanggal2->diff($tanggal1);
             return implode($s);
 //            return json_encode($data->list_obat);
         }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tagihan_pelayanan','format'=>'html',
-        'value'=>function($data){
-            foreach ($data->tagihan_pelayanan as $row){
-                if (!empty($row)){
-                    $s[] = $row['f2'] ." ". $row['f3'] . "<br>";
-                }else{
-                    $s[]='null';
-                }
-            }
-            return implode($s);
-//            return json_encode($data->tagihan_pelayanan);
-        }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', ],//status covid
+        
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_id', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_status', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', ],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang_rawat_px',
-        'value'=>function($data){
-            return json_encode($data->ruang_rawat_px);
-        }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'class_id', ],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kelas_pelayanan',
-        'value'=>function($data){
-        return json_encode($data->kelas_pelayanan);
-    }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tindakan_px',
-        'value'=>function($data){
-            return json_encode($data->tindakan_px);
-        }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_id', ],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'transfer_id', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'status_grouper', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'grouper_code', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id_klaim', ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan',
-        'value'=>function($data){
-            return json_encode($data->unit_layanan);
-        }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_penunjang',
-        'value'=>function($data){
-            return json_encode($data->hasil_penunjang);
-        }],
 
-    
-
-    
-
-    
-
-   
-    
 
     [
         'class' => 'yii\grid\ActionColumn',
