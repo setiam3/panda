@@ -6,6 +6,16 @@ use johnitvn\ajaxcrud\CrudAsset;
 use johnitvn\ajaxcrud\BulkButtonWidget;
 CrudAsset::register($this);
 $idmodal=md5($dataProvider->query->modelClass);
+
+$this->registerJs('
+ jQuery(document).ready(function(){
+ $(".masuk").html("");
+ $(".title").each(function(){
+ $(".masuk").append($(this).html());
+ });
+ $(".title").hide();
+ })
+');
 ?>
 <div class="row">
     <div class="row">

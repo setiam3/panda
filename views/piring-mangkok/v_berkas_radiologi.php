@@ -38,33 +38,33 @@ $this->registerCss("
 <p align="center" style="padding-top:0px; margin-top:0px; font-size:10px;"></p>
 <table width="100%" style="font-size:12px;">
     <tr>
-        <td class="field_judul" width="4%">1.</td>
-        <td class="field_judul" width="20%">Nama Rumah Sakit</td>
+        <td style = "font-weight: 900;" class="field_judul" width="4%">1.</td>
+        <td style = "font-weight: 900;" class="field_judul" width="20%">Nama Rumah Sakit</td>
         <td width="2%">:</td>
         <td colspan="4">RSUD IBNU SINA KABUPATEN GRESIK</td>
     </tr>
     <tr>
-        <td class="field_judul">2.</td>
-        <td class="field_judul">Nomor Rekam Medik</td>
+        <td style = "font-weight: 900;" class="field_judul">2.</td>
+        <td style = "font-weight: 900;" class="field_judul">Nomor Rekam Medik</td>
         <td>:</td>
         <td ><?=$model[0]['px_norm']?></td>
-        <td class="field_judul">NIK</td>
+        <td style = "font-weight: 900;" class="field_judul">NIK</td>
         <td>:</td>
         <td ><?=$model[0]['px_noktp']?></td>
     </tr>
     <tr>
-        <td class="field_judul">3.</td>
-        <td class="field_judul">Nama Pasien</td>
+        <td style = "font-weight: 900;" class="field_judul">3.</td>
+        <td style = "font-weight: 900;" class="field_judul">Nama Pasien</td>
         <td>:</td>
         <td colspan="4"><?=strtoupper($model[0]['px_name'])?></td>
     </tr>
 
     <tr>
-        <td class="field_judul">4.</td>
+        <td style = "font-weight: 900;" class="field_judul">4.</td>
         <!-- <td class="field_judul">Tanggal Masuk</td>
 		<td>:</td>
 		<td><?php if($model[0]['visit_date']) echo date('d-m-Y',strtotime($model[0]['visit_date']))?></td> -->
-        <td class="field_judul">Tanggal Keluar</td>
+        <td style = "font-weight: 900;" class="field_judul">Tanggal Keluar</td>
         <td>:</td>
         <td><?php if($model[0]['visit_end_date']) {
                 echo date('d-m-Y',strtotime($model[0]['visit_end_date']));
@@ -75,7 +75,7 @@ $this->registerCss("
 
 </table>
 <br>
-<table width="630px" style="font-size: 12px; border-collapse: collapse;" border="0">
+<table width="630px" style="font-size: 12px; border-collapse: collapse;" border="1">
     <?php
     echo "<tr>
             <td width='5%' style='border-top: 0px; border-left: 0px;border-bottom: 0px;'></td><td>Tanggal</td><td align='center'>Pemeriksaan</td><td>Hasil</td></tr>";

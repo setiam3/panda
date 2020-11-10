@@ -110,4 +110,13 @@ class Panda extends \yii\db\ActiveRecord
             'px_birthdate' => 'tgl lahir',
         ];
     }
+
+    public function kolomruangan(){
+        $sql = 'select ruang_rawat_px from v_panda';
+        $datas = Yii::$app->db->createCommand($sql)->queryAll();
+        foreach ($datas as $data){
+            $data[''];
+        }
+
+    }
 }

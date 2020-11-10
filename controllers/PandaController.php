@@ -4,9 +4,44 @@ namespace app\controllers;
 use app\models\PandaSearch;
 use Yii;
 use app\models\Panda;
+use yii\i18n\Formatter;
 
 class PandaController extends \yii\web\Controller
 {
+    public function coba($visid){
+        $sql = "SELECT ruang_rawat_px from yanmed.v_panda where visit_id ='$visid'";
+        $datas = Yii::$app->db->createCommand($sql)->queryAll();
+$table='<table>';
+        foreach ($datas as $data){
+            $table.='<tr>';
+            $lain_3=json_decode($data['ruang_rawat_px']);
+
+            foreach ($lain_3 as $r){
+                $KMasuk[] = $r->f1;
+                $KKemluar[] = $r->f2;
+                $KRuangan[] = $r->f3;
+
+
+                $table.= '<td>';
+                $table.= '<table>';
+                $table.= '<tr class="title">';
+                $table.= '<th>tgl masuk </th> <th>tgl keluar </th> <th>ruangan </th>';
+                $table.= '</tr>';
+                $table.= '<tr>';
+                $table.= '<td>'.date('Y-m-d',strtotime($r->f1)).'</td>';
+                $table.= '<td>'.date('Y-m-d',strtotime($r->f2)).'</td>';
+                $table.= '<td>'.$r->f3.'</td>';
+                $table.= '</tr>';
+                $table.= '</table>';
+            $table.= '</td>';
+
+            }
+            $table.= '</tr>';
+        }
+        $table.= '</table>';
+        return $table;
+
+    }
     public function actionIndex()
     {
         $where='';
