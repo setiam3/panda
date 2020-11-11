@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 class PandaSearch extends Panda
 {
     public $createTimeStart,$createTimeEnd;
+    public $KRS;
     public function rules()
     {
         return [
@@ -44,6 +45,7 @@ class PandaSearch extends Panda
                 'hasil_penunjang',
                 'list_obat',
                 'px_birthdate',
+//                'KRS',
             ],'safe'],
         ];
     }
@@ -81,6 +83,8 @@ class PandaSearch extends Panda
             $this->createTimeStart = $dates[0];
             $this->createTimeEnd = $dates[1];
         }
+
+
         $query
             ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
 //            ->andFilterWhere(['like', 'visit_date', $this->visit_date])
@@ -95,7 +99,7 @@ class PandaSearch extends Panda
 //            ->andFilterWhere(['like', 'visit_end_date', $this->visit_end_date])
             ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
             ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px])
-//            ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px2])
+//            ->andFilterWhere(['like', 'KRS', $this->KRS])
             ->andFilterWhere(['like', 'jns_layanan', $this->jns_layanan])
             ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
             ->andFilterWhere(['like', 'diagnosa_px', $this->diagnosa_px])

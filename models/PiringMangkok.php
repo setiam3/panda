@@ -22,7 +22,7 @@ class PiringMangkok extends \yii\db\ActiveRecord
         return [
             [['visit_id', 'px_id', 'surety_id', 'visit_status', 'class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'default', 'value' => null],
             [['visit_id', 'px_id', 'surety_id', 'visit_status', 'class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'integer'],
-            [['visit_date', 'visit_end_date', 'kelas_pelayanan', 'billing_inacbg', 'unit_layanan'], 'safe'],
+            [['visit_date', 'visit_end_date', 'kelas_pelayanan', 'billing_inacbg', 'unit_layanan','sep_tgl','list_obat'], 'safe'],
             [['px_address', 'ruang_rawat_px', 'jns_layanan', 'diagnosa_px', 'tindakan_px', 'visit_end_doctor_name'], 'string'],
             [['px_norm'], 'string', 'max' => 10],
             [['px_noktp', 'pxsurety_no', 'status_grouper', 'grouper_code'], 'string', 'max' => 20],
@@ -68,6 +68,8 @@ class PiringMangkok extends \yii\db\ActiveRecord
             'grouper_code' => 'Grouper Code',
             'visit_id_klaim' => 'Visit Id Klaim',
             'unit_layanan' => 'Unit Layanan',
+            'sep_tgl'=>'tgl sep',
+            'list_obat'=>'list obat'
         ];
     }
 //    public function getSurety(){

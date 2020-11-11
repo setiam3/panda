@@ -40,6 +40,7 @@ class PiringMangkokSearch extends PiringMangkok
             'grouper_code',
             'visit_id_klaim',
             'unit_layanan',
+                'sep_tgl'
             ],'safe'],
         ];
     }

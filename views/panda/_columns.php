@@ -5,17 +5,17 @@ use yii\helpers\Html;
 
 
 return [
-    [
-        'header'=>Html::checkbox('selection_all', false, ['class'=>'select-on-check-all', 'value'=>1, 'onclick'=>'$(".kv-row-checkbox").prop("checked", $(this).is(":checked"));']),
-        'contentOptions'=>['class'=>'kv-row-select'],
-        'content'=>function($model, $key){
-            return Html::checkbox('selection[]', false, ['class'=>'kv-row-checkbox', 'value'=>$model->visit_id,]);
-        },
-        'hAlign'=>'center',
-        'vAlign'=>'middle',
-        'hiddenFromExport'=>true,
-        'mergeHeader'=>true,
-    ],
+//    [
+//        'header'=>Html::checkbox('selection_all', false, ['class'=>'select-on-check-all', 'value'=>1, 'onclick'=>'$(".kv-row-checkbox").prop("checked", $(this).is(":checked"));']),
+//        'contentOptions'=>['class'=>'kv-row-select'],
+//        'content'=>function($model, $key){
+//            return Html::checkbox('selection[]', false, ['class'=>'kv-row-checkbox', 'value'=>$model->visit_id,]);
+//        },
+//        'hAlign'=>'center',
+//        'vAlign'=>'middle',
+//        'hiddenFromExport'=>true,
+//        'mergeHeader'=>true,
+//    ],
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
@@ -41,7 +41,13 @@ return [
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', 'label'=>'pelayanan'],//pelayanan
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_name', 'label'=>'jenis penjaman'],//jenis penjaminan
-
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan', 'label'=>'Unit Pelayanan',
+        'value'=>function($data){
+            foreach ($data->unit_layanan as $row){
+                $s[] = $row['f2'];
+            }
+            return json_encode($s);
+        }],//jenis penjaminan
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_date', 'label'=>'Tanggal Masuk'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'Tanggal keluar'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'KRS',
@@ -52,13 +58,14 @@ return [
         $s = "Belum Krs";
     }
 
+
     return $s;
         }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'Pasien'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate', 'label'=>'Tanggal Lahir'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'No. RM'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'NIK'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', 'label'=>'No. SEP'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_tgl', 'label'=>'No. SEP'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan',
         'value'=>function($data){
             foreach ($data->unit_layanan as $unit){
@@ -202,7 +209,7 @@ return [
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'plastik') !== false){
+                if (stripos($row['f2'],'desinfektan jenazah') !== false){
                     $s[] = $row['f3'];
                 }
 
