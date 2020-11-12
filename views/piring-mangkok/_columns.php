@@ -22,7 +22,7 @@ return [
         'width' => '30px',
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_name', 'label'=>'jenis pinjaman'],
-//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', ],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', ],
     [ 'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'visit_date',
         'filterType' => GridView::FILTER_DATE_RANGE,
@@ -38,7 +38,6 @@ return [
                 ],
             ],
         ]),
-        'label'=>'rentan waktu',
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'no RM'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', 'label'=>'pelayanan'],
@@ -50,8 +49,7 @@ return [
             return json_encode($s);
         }
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_date', 'label'=>'tgl masuk'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'tgl keluar'],
+
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'krs',
         'value'=>function($data){
             if (!empty($data->visit_end_date)){
@@ -100,6 +98,8 @@ return [
                 $s = "(-)";
             }elseif ($data->visit_end_cause_id == "48"){
                 $s = "Atas Persetujuan Dokter";
+            }else{
+                $s = "null";
             }
             return $s;
         }],

@@ -65,6 +65,7 @@
     </tr>
     <?php
     $handel ="";
+    $jumlah = 0;
     foreach($bea_tindakan as $rs_bea):
         if($rs_bea['kelompok_tagihan'] != $handel){
             echo "<tr><th></th><th colspan='6' style='text-align:left;'>".strtoupper($rs_bea['kelompok_tagihan'])."</th></tr>";
@@ -76,6 +77,8 @@
 				<td style="text-align:right;" colspan="2"></td>
 				<td>: '.number_format($rs_bea['tagihan_pasien'],0,',','.').'</td>
 			</tr>';
+
+        $jumlah += $rs_bea['tagihan_pasien'];
     endforeach;
     ?>
     <tr>
@@ -83,6 +86,8 @@
         <td></td>
         <td><strong>Total Biaya Rumah Sakit</strong></td>
         <td colspan="4" align="right">:</td>
-        <td><strong><?php echo number_format($rs_bea['tagihan_pasien'],0,',','.')?></strong></td>
+        <td><strong><?php
+
+                echo number_format($jumlah,0,',','.')?></strong></td>
     </tr>
 </table>

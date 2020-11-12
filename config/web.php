@@ -21,7 +21,7 @@ $config = [
             'class' => 'kartik\mpdf\Pdf',
             'format' => [215,330],//'A4',
             'orientation' => 'P',
-            'destination' => 'I',
+            'destination' => 'I',//I or S
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
