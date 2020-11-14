@@ -231,17 +231,12 @@ class PiringMangkokController extends \yii\web\Controller
             }
 
             $billing = $data->billing_inacbg;
-            $bill_ina = 0;
             foreach ($billing as $bill){
-                if (!empty($bill['f2'])){
-                    $bill_ina += $bill['f3'];
-                }else{
-                    $bill_ina = $bill['f3'];
-                }
+                $tarif[$bill['f2']] = $bill['f3'];
 
             }
 
-
+            $total_tagihan = json_encode($tarif);
 
             $icus = $data->ruang_rawat_px;
             $jICU = 0;
@@ -337,7 +332,7 @@ class PiringMangkokController extends \yii\web\Controller
 							"discharge_status": "'.$keadaan_krs.'",
 							"diagnosa": "'.$data->diagnosa_px.'",
 							"procedure": "'.$data->tindakan_px.'",
-							"tarif_rs":  '.$bill_ina.',
+							"tarif_rs":  '.$total_tagihan.',
 							"nama_dokter": "'.$data->visit_end_doctor_name.'",
 							"kode_tarif": "'.$kode_tarif.'",
 							"coder_nik": "245",
@@ -362,7 +357,7 @@ class PiringMangkokController extends \yii\web\Controller
             /*uncomment konek*/
 
              $metadata = $dt['metadata'];
-            var_dump($param);
+
              if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 $this->actionUploadberkas($param[0]['visit_id'],$nosep);
                  Yii::$app->db->createCommand()
@@ -380,7 +375,12 @@ class PiringMangkokController extends \yii\web\Controller
                      ->update('yanmed.visit', array(
                          'transfer_id'=>Yii::$app->db->getLastInsertID(),
                      ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
+//                 $this->delete_claim($nosep,$param);
+//                     $this->grouper_stage_1($nosep,$param);
                  echo json_encode($metadata);
+                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
+                     $this->grouper_stage_1($param);
+                 }
              }
              else{
                 $this->delete_claim($nosep,$param);
@@ -392,6 +392,102 @@ class PiringMangkokController extends \yii\web\Controller
              }
 /*end update*/
 
+        }
+
+    }
+
+    public function grouper_stage_1($nosep,$param){
+        foreach ($param as $dt){
+            foreach ($dt->ruang_rawat_px as $row){
+                $visit_class_id6 = $row['f6'];
+                $surety_class_id = $row['f7'];
+            }
+
+            $request = '{
+				"metadata": {
+					"method":"grouper",
+					"stage":"1"
+				},
+				"data": {
+					"nomor_sep":"'.$nosep.'"
+				}
+			}';
+            $data = $this->connect_inacbg($request,$dt->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+            $metadata = $data['metadata'];
+            if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
+                if($this->is_go_grouper != '0'){
+                    $hasil = $data['response'];
+                    $tarif = $data['tarif_alt'][$surety_class_id-1];
+                    if($dt->srv_type == 'RI'){
+                        if($dt->visit_class_id >4){ // bila naik ke vip, maka ambil kelas 1
+                            $visit_class_id = 2;
+                            $claimvisit_value = $data['tarif_alt'][0]['tarif_inacbg'];
+                        }
+                        else{
+                            $visit_class_id = $dt->visit_class_id;
+                            $claimvisit_value = $data['tarif_alt'][$visit_class_id6-2]['tarif_inacbg'];
+
+                        }
+                    }
+                    else{
+                        // bila rawat jalan, maka visit class id tetap namun claim visit value dari surety id
+                        $visit_class_id = $param['visit_class_id'];
+                        $claimvisit_value =$data['tarif_alt'][$visit_class_id6-2]['tarif_inacbg'];
+                    }
+
+
+                    $grouper = array(
+                        'visit_id' 		=> $dt->visit_id,
+                        'surety_id' 	=> $dt->surety_id,
+                        'grouper_code'	=> $hasil['cbg']['code'],
+                        'grouper_name' 	=> $hasil['cbg']['description'],
+                        'claim_value' 	=> $hasil['cbg']['tariff'],
+                        'status' 		=> 1,
+                        'act_date' 		=> date('Y-m-d H:i:s'),
+                        'act_user_id' 	=> $this->userData['user_id'],//userid
+                        'class_id'		=> $surety_class_id,
+                        'classvisit_id' => $visit_class_id,
+                        'claimvisit_value'	=> $claimvisit_value,
+                        'classmiddle_id'	=> 2, // kelas 1
+                        'classmiddle_value'	=> $data['tarif_alt'][0]['tarif_inacbg'], // tarif kelas 1
+                    );
+//                    $valueult = $this->m_tinacbg->insert_result_grouper($grouper);
+                    $sql = "DELETE FROM yanmed.visit_claim WHERE visit_id = '$dt->visit_id' and surety_id = '$dt->surty_id'";
+                    $valueult = \Yii::$app->db->createCommand($sql)->queryAll();
+
+                    $sql = "INSERT INTO yanmed.visit_claim VALUES '$grouper'";
+                    $valueult = \Yii::$app->db->createCommand($sql)->queryAll();
+                    if($valueult){
+                        $item['code'] = $metadata['code'];
+                        $item['message'] = $metadata['message'];
+                    }
+                    else{
+//                        $this->m_tinacbg->remove_transfer_id($param);
+                        Yii::$app->db->createCommand()
+                            ->update('yanmed.visit', array(
+                                'transfer_id'=>null,
+                            ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
+                    }
+                }
+            }
+            //belum
+            else{
+                Yii::$app->db->createCommand()
+                    ->update('yanmed.visit', array(
+                        'transfer_id'=>null,
+                    ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
+                $tranfer_id = $dt['transfer_id'];
+
+                $sql = 'DELETE FROM yanmed.transfer_inacbg WHERE transfer_id = $tranfer_id';
+                $valueult = \Yii::$app->db->createCommand($sql)->queryAll();
+//                $this->m_tinacbg->delete_transfer($param);
+                $item['code'] = $metadata['code'];
+                $item['message'] = $metadata['message'];
+                $item['error_no'] = $metadata['error_no'];
+                echo "Error - ".$item['error_no']." - ".$item['message'];
+                die;
+
+            }
         }
 
     }
@@ -437,7 +533,7 @@ class PiringMangkokController extends \yii\web\Controller
 		 	}';
 
          $act = $this->connect_inacbg($request,$model[0]['surety_id'],$this->bpjs_surety_id,$this->jamkesda_surety_id);
-//
+//    var_dump($act);die();
         /*end upload ruang rawat*/
 
         /*upload berkass billing*/
@@ -621,7 +717,6 @@ class PiringMangkokController extends \yii\web\Controller
     }
 
     function delete_claim($nosep,$param){
-        var_dump($nosep);die();
         foreach ($param as $data){
             $request = '{
 				"metadata": {
@@ -645,14 +740,12 @@ class PiringMangkokController extends \yii\web\Controller
             }
         }
 
-
     }
 
     public function delete_all_file($sep_no=0,$param)
 	{
 
 
-        foreach ($param as $data){
 
             $request = '{
 						"metadata": {        
@@ -662,10 +755,11 @@ class PiringMangkokController extends \yii\web\Controller
 							"nomor_sep": "'.$sep_no.'"    
 						} 
 					}';
-            $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-//		$act 	= $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-            var_dump($dt);die();
-            if ($dt['response']['count'] > 0) {
+
+            $act = $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+
+//                var_dump($act);die();
+            if ($act['response']['count'] > 0) {
                 $berkas = $act['response']['data'];
                 foreach ($berkas as $key => $value) {
                     $request = '{
@@ -678,12 +772,13 @@ class PiringMangkokController extends \yii\web\Controller
 								} 
 							}';
                     $act = $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+
                 }
                 return "OK";
             }else{
                 return "OK";
             }
-        }
+
 
 	}
 
@@ -699,9 +794,7 @@ class PiringMangkokController extends \yii\web\Controller
         return $this->redirect("https://wa.me/+6282143463253?text=mohon lengkapi data $pesan ");
     }
 
-    public function actionTarikGrouper($id){
-        return $this->redirect("http:link_download_pdf", ['target' => '_blank']);
-    }
+
 
     function connect_inacbg($request, $surety_id, $bpjs_surety_id, $jamkesda_surety_id){
         // 9 = p2tp2a - jkn

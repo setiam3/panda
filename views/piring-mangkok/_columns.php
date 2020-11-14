@@ -233,7 +233,7 @@ return [
 //            return json_encode($s);
 //        }],
 
-
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'status_grouper', 'label'=>'status'],
 
 
 //    [
