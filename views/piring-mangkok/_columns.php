@@ -53,14 +53,14 @@ return [
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS'],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'krs',
-        'value'=>function($data){
-            if (!empty($data->visit_end_date)){
-                $s = "sudah Krs";
-            }else{
-                $s = "belum Krs";
-            }
-            return json_encode($s);
-        }],
+//        'value'=>function($data){
+//            if (!empty($data->visit_end_date)){
+//                $s = "sudah Krs";
+//            }else{
+//                $s = "belum Krs";
+//            }
+//            return json_encode($s);
+//        }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'nama Pasien'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate', 'label'=>'tgl lahir'],
@@ -152,88 +152,88 @@ return [
             return json_encode($data->list_obat);
         },
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Pemulasaraan jenazah',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'Pemulasaraan jenazah') !== false){
-                    $s[] = $row['f3'];
-                }
-
-            }
-            return json_encode($s);
-        }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kantong jenazah',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'kantong jenazah') !== false){
-                    $s[] = $row['f3'];
-                }
-
-            }
-            return json_encode($s);
-        }],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Pemulasaraan jenazah',
+//        'value'=>function($data){
+//            $s=[];
+//            foreach ($data->tagihan_pelayanan as $row){
+//                if (stripos($row['f2'],'Pemulasaraan jenazah') !== false){
+//                    $s[] = $row['f3'];
+//                }
 //
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'peti jenazah',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'peti jenazah') !== false){
-                    $s[] = $row['f3'];
-                }
-
-            }
-            return json_encode($s);
-        }],
+//            }
+//            return json_encode($s);
+//        }],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kantong jenazah',
+//        'value'=>function($data){
+//            $s=[];
+//            foreach ($data->tagihan_pelayanan as $row){
+//                if (stripos($row['f2'],'kantong jenazah') !== false){
+//                    $s[] = $row['f3'];
+//                }
 //
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'plastik jenazah',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'plastik') !== false){
-                    $s[] = $row['f3'];
-                }
-
-            }
-            return json_encode($s);
-        }],
+//            }
+//            return json_encode($s);
+//        }],
+////
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'peti jenazah',
+//        'value'=>function($data){
+//            $s=[];
+//            foreach ($data->tagihan_pelayanan as $row){
+//                if (stripos($row['f2'],'peti jenazah') !== false){
+//                    $s[] = $row['f3'];
+//                }
 //
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Desinfektan jenazah',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'desinfektan jenazah') !== false){
-                    $s[] = $row['f3'];
-                }
-
-            }
-            return json_encode($s);
-        }],
+//            }
+//            return json_encode($s);
+//        }],
+////
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'plastik jenazah',
+//        'value'=>function($data){
+//            $s=[];
+//            foreach ($data->tagihan_pelayanan as $row){
+//                if (stripos($row['f2'],'plastik') !== false){
+//                    $s[] = $row['f3'];
+//                }
 //
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'transport Mobil',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'mobil') !== false && stripos($row['f2'],'transport')){
-                    $s[] = $row['f3'];
-                }
-
-            }
-            return json_encode($s);
-        }],
+//            }
+//            return json_encode($s);
+//        }],
+////
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Desinfektan jenazah',
+//        'value'=>function($data){
+//            $s=[];
+//            foreach ($data->tagihan_pelayanan as $row){
+//                if (stripos($row['f2'],'desinfektan jenazah') !== false){
+//                    $s[] = $row['f3'];
+//                }
 //
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'Desinfektan Mobil jenazah',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if (stripos($row['f2'],'mobil') !== false && stripos($row['f2'],'Desinfektan')){
-                    $s[] = $row['f3'];
-                }
-
-            }
-            return json_encode($s);
-        }],
+//            }
+//            return json_encode($s);
+//        }],
+////
+//    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'transport Mobil',
+//        'value'=>function($data){
+//            $s=[];
+//            foreach ($data->tagihan_pelayanan as $row){
+//                if (stripos($row['f2'],'mobil') !== false && stripos($row['f2'],'transport')){
+//                    $s[] = $row['f3'];
+//                }
+//
+//            }
+//            return json_encode($s);
+//        }],
+////
+//    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'Desinfektan Mobil jenazah',
+//        'value'=>function($data){
+//            $s=[];
+//            foreach ($data->tagihan_pelayanan as $row){
+//                if (stripos($row['f2'],'mobil') !== false && stripos($row['f2'],'Desinfektan')){
+//                    $s[] = $row['f3'];
+//                }
+//
+//            }
+//            return json_encode($s);
+//        }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'status_grouper', 'label'=>'status'],
 

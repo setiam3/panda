@@ -79,23 +79,33 @@ class PiringMangkokController extends \yii\web\Controller
                     //sukses
 
                     //klaim baru
-                    $member_nomer = empty($data->pxsurety_no)? "0" : $data->pxsurety_no;
-                    $sjp_no = empty($sep_no)? "000" : $sep_no;
-                    $px_norm  = empty($data->px_norm)? "0" : $data->px_norm;
+                    $this->klaim_baru($sep_no,$data);
+                    /*end update*/
+                    /*komen*/
+//                   $this->set_claim_data($datas,$nosep);
+                }
+            }
+        }
+    }
 
-                    $noka = $member_nomer;
-                    $nosep = $sjp_no;
-                    $px_norm = $px_norm;
-                    $px_name = $data->px_name;
-                    $birth = $data->px_birthdate." 00:00:00";
+    public function klaim_baru($nosep,$data){
 
-                    if($data->px_sex == "L"){
-                        $gender = "1";
-                    }else{
-                        $gender = "2";
-                    }
+        $member_nomer = empty($data->pxsurety_no)? "0" : $data->pxsurety_no;
+        $sjp_no = empty($nosep)? "000" : $nosep;
+        $px_norm  = empty($data->px_norm)? "0" : $data->px_norm;
+//        var_dump($sjp_no);die();
+        $noka = $member_nomer;
+        $nosep = $sjp_no;
+        $px_norm = $px_norm;
+        $px_name = $data->px_name;
+        $birth = $data->px_birthdate." 00:00:00";
+        if($data->px_sex == "L"){
+            $gender = "1";
+        }else{
+            $gender = "2";
+        }
 
-                    $request = '{
+        $request = '{
                         "metadata": {
                             "method": "new_claim"
                         },
@@ -110,62 +120,59 @@ class PiringMangkokController extends \yii\web\Controller
                     }';
 //                    konek
 
-                     $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-                    /*uncomment update*/
-                     $metadata = $dt['metadata']; //status berhasil
+        $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+        /*uncomment update*/
+//        var_dump($request);die();
+        $metadata = $dt['metadata']; //status berhasil
 //                    var_dump($metadata);die();
 
-                     if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
-                         $hasil = $dt['response'];
-                         $item["code"] = $metadata['code'];
-                         $item['message'] = $metadata['message'];
-                         $item["patient_id"] =$hasil["patient_id"];
-                         $item["admission_id"] =$hasil["admission_id"];
-                         $item["hospital_admission_id"] =$hasil["hospital_admission_id"];
-//                         $this->set_claim_data($datas,$nosep,$member_nomer);
-                         $this->set_claim_data($noka,$nosep,$datas);
+        if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
+            $hasil = $dt['response'];
+            $item["code"] = $metadata['code'];
+            $item['message'] = $metadata['message'];
+            $item["patient_id"] =$hasil["patient_id"];
+            $item["admission_id"] =$hasil["admission_id"];
+            $item["hospital_admission_id"] =$hasil["hospital_admission_id"];
+            $this->set_claim_data($noka,$nosep,$data);
 
-                     }
-                     else{
-                         if($metadata['code'] == 400 && $metadata['error_no'] == "E2007"){
-                             $this->set_claim_data($noka,$nosep,$datas);
-                         }
-                         else{
-                             $item['code'] = $metadata['code'];
-                             $item['message'] = $metadata['message'];
-                             $item['error_no'] = $metadata['error_no'];
-                             $item['norm'] = $data['duplicate'][0]["nomor_rm"];
+        }
+        else{
+            if($metadata['code'] == 400 && $metadata['error_no'] == "E2007"){
+                $this->set_claim_data($noka,$nosep,$data);
+            }
+            else{
+                $item['code'] = $metadata['code'];
+                $item['message'] = $metadata['message'];
+                $item['error_no'] = $metadata['error_no'];
+                $item['norm'] = $data['duplicate'][0]["nomor_rm"];
 
-                             if (!empty($item['error_no'])) {
-                                 echo "Error - ".$item['error_no']." - ".$item['message'];
-                             }
-                             die;
-                         }
-                     }
-                    /*end update*/
-                    /*komen*/
-//                   $this->set_claim_data($datas,$nosep);
+                if (!empty($item['error_no'])) {
+                    echo "Error - ".$item['error_no']." - ".$item['message'];
                 }
+                die;
             }
         }
     }
 
-    public function set_claim_data($noka, $nosep, $param){ //$param = $data
+    public function set_claim_data($noka, $nosep, $data){ //$param = $data
+
         $member_no = $noka;
         $jamkesda_surety_id="113";
         $class_id_vip="5";
         $kode_tarif="BP";
+//                var_dump($data->klb_id);die();
 
-        foreach ($param as $data){
+//        foreach ($param as $data){
             if ($data->klb_id == 667 || $data->klb_id == 668) {
                 $covid19_status_cd = 1;
-            }elseif ($data->klb_id > 668 && $data->klb_id < 673) {
+            }elseif ($data->klb_id < 668 && $data->klb_id < 673) {
                 $covid19_status_cd = 2;
             }elseif ($data->klb_id > 672 && $data->klb_id <= 675) {
                 $covid19_status_cd = 3;
             }else{
                 $covid19_status_cd = 0;
             }
+        var_dump($covid19_status_cd);die();
 
             $jenis = $data->kelas_pelayanan; //jumlah naik kelas
             foreach ($jenis as $js){
@@ -357,7 +364,7 @@ class PiringMangkokController extends \yii\web\Controller
             /*uncomment konek*/
 
              $metadata = $dt['metadata'];
-
+        var_dump($metadata);die();
              if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 $this->actionUploadberkas($param[0]['visit_id'],$nosep);
                  Yii::$app->db->createCommand()
@@ -392,7 +399,7 @@ class PiringMangkokController extends \yii\web\Controller
              }
 /*end update*/
 
-        }
+//        }
 
     }
 
