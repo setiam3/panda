@@ -375,12 +375,12 @@ class PiringMangkokController extends \yii\web\Controller
                      ->update('yanmed.visit', array(
                          'transfer_id'=>Yii::$app->db->getLastInsertID(),
                      ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
-//                 $this->delete_claim($nosep,$param);
-//                     $this->grouper_stage_1($nosep,$param);
+
                  echo json_encode($metadata);
-                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
-                     $this->grouper_stage_1($param);
-                 }
+//                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
+////                     $this->grouper_stage_1($nosep,$param);
+//                     $this->grouper_stage_1($param);
+//                 }
              }
              else{
                 $this->delete_claim($nosep,$param);
