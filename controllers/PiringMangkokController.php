@@ -232,11 +232,21 @@ class PiringMangkokController extends \yii\web\Controller
 
             $billing = $data->billing_inacbg;
             foreach ($billing as $bill){
-                $tarif[$bill['f2']] = $bill['f3'];
+                if (empty($bill['f2'])){
+                        $tarif['prosedur_non_bedah'] = $billing[0]['f3'] + $bill['f3'];
+
+
+                }else{
+                    $tarif[$bill['f2']] = $bill['f3'];
+
+                }
 
             }
 
+
+
             $total_tagihan = json_encode($tarif);
+//            var_dump($total_tagihan);die();
 
             $icus = $data->ruang_rawat_px;
             $jICU = 0;
@@ -323,7 +333,7 @@ class PiringMangkokController extends \yii\web\Controller
 							"tgl_masuk": "'.$data->visit_date.'",
 							"tgl_pulang": "'.$visit_end_date.'",
 							"icu_indikator": "'.$ke_icu.'",
-                            "icu_los": "44",
+                            "icu_los": "'.$jumlah_hari_icu.'",
 							"upgrade_class_ind": "'.$naik_kelas.'",
 							"upgrade_class_class": "'.$kelas_baru.'",
                             "upgrade_class_los": "'.$lama_rawat.'",
@@ -378,13 +388,14 @@ class PiringMangkokController extends \yii\web\Controller
                      ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
 
                  echo json_encode($metadata);
-//                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
+                 $is_go_grouper =1;
+                 if(is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
 ////                     $this->grouper_stage_1($nosep,$param);
-//                     $this->grouper_stage_1($param);
-//                 }
+                     $this->grouper_stage_1($param);
+                 }
              }
              else{
-                $this->delete_claim($nosep,$param);
+//                 $this->delete_claim($param);
                  $item['code'] 	= $metadata['code'];
                  $item['message'] = $metadata['message'];
                  $item['error_no'] = $metadata['error_no'];
@@ -493,7 +504,6 @@ class PiringMangkokController extends \yii\web\Controller
 
     }
 
-//    public function actionUploadberkas($visit_id)
     public function actionUploadberkas($visit_id,$nosep)
     {
         $model = PiringMangkok::find()->where(['visit_id'=>$visit_id])->all();
@@ -604,6 +614,7 @@ class PiringMangkokController extends \yii\web\Controller
 				where s.visit_id = '$visit_id' and parentgroup != '$parent'
 				order by tanggal asc ";
         $tgl_checkup=Yii::$app->db->createCommand($sql)->queryAll();
+//        header tabel
         $all1 = "";
         $all1 .= "
             <tr>
@@ -613,7 +624,7 @@ class PiringMangkokController extends \yii\web\Controller
         }
         $all1 .="</tr>";
 
-
+//        hasil
         $sql ="SELECT bill_name ,namecheck, ms_check_id
 				from yanmed.checkup c
 				join yanmed.ms_check mc on c.ms_check_id = mc.idcheck
@@ -657,9 +668,21 @@ class PiringMangkokController extends \yii\web\Controller
             $all .="</tr>";
         }
 
+//        foreach ($model[0]->hasil_penunjang as $leb){
+//            $all .= "
+//            <tr><td  style='border-top: 0px; border-left: 0px;border-bottom: 0px;'></td><td>&nbsp;&nbsp;".$leb['f3']."<td>";
+//            foreach ($leb['f5'] as $value) {
+//                $hasil = isset($leb['f4']) ? $leb['f4'] : "";
+//
+//                $all .="<td align='center'>".$hasil."</td>";
+//
+//            }
+//            $all .="</tr>";
+//        }
+
 
         $data['all2']= $all;
-        $data['all1']= $all1;
+        $data['all1']= $all1;//header
 
         $pdf = new Pdf;
         $pdf->content=$this->renderPartial('v_berkas_lab',['model'=>$model,'tgl_checkup'=>$tgl_checkup,'data'=>$data]);
@@ -717,14 +740,14 @@ class PiringMangkokController extends \yii\web\Controller
         return $act;
     }
 
-    function delete_claim($nosep,$param){
+    function delete_claim($param){
         foreach ($param as $data){
             $request = '{
 				"metadata": {
 					"method":"delete_claim"
 				},
 				"data": {
-					"nomor_sep":"'.$nosep.'",
+					"nomor_sep":"'.$data->sep_no.'",
 					"coder_nik": "245"
 
 				}
@@ -733,7 +756,7 @@ class PiringMangkokController extends \yii\web\Controller
             $metadata = $dt['metadata'];
 
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
-                $this->delete_all_file($nosep,$param);
+                $this->delete_all_file($param);
                 return "berhasil";
             }
             else{
@@ -743,14 +766,14 @@ class PiringMangkokController extends \yii\web\Controller
 
     }
 
-    public function delete_all_file($sep_no=0,$param)
+    public function delete_all_file($param)
 	{
             $request = '{
 						"metadata": {        
 							"method": "file_get"    
 						},    
 						"data": {        
-							"nomor_sep": "'.$sep_no.'"    
+							"nomor_sep": "'.$param[0]->sep_no.'"    
 						} 
 					}';
 
