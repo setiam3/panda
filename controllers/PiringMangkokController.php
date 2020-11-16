@@ -323,7 +323,7 @@ class PiringMangkokController extends \yii\web\Controller
 							"tgl_masuk": "'.$data->visit_date.'",
 							"tgl_pulang": "'.$visit_end_date.'",
 							"icu_indikator": "'.$ke_icu.'",
-                            "icu_los": "'.$jumlah_hari_icu.'",
+                            "icu_los": "44",
 							"upgrade_class_ind": "'.$naik_kelas.'",
 							"upgrade_class_class": "'.$kelas_baru.'",
                             "upgrade_class_los": "'.$lama_rawat.'",
@@ -357,6 +357,7 @@ class PiringMangkokController extends \yii\web\Controller
             /*uncomment konek*/
 
              $metadata = $dt['metadata'];
+//             var_dump($metadata);die();
 
              if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 $this->actionUploadberkas($param[0]['visit_id'],$nosep);
@@ -744,9 +745,6 @@ class PiringMangkokController extends \yii\web\Controller
 
     public function delete_all_file($sep_no=0,$param)
 	{
-
-
-
             $request = '{
 						"metadata": {        
 							"method": "file_get"    
@@ -758,7 +756,7 @@ class PiringMangkokController extends \yii\web\Controller
 
             $act = $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
-//                var_dump($act);die();
+                var_dump($act);die();
             if ($act['response']['count'] > 0) {
                 $berkas = $act['response']['data'];
                 foreach ($berkas as $key => $value) {
