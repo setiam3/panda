@@ -9,6 +9,7 @@ class PiringMangkokController extends \yii\web\Controller
 {
     public $bpjs_surety_id="2";
     public $jamkesda_surety_id="113";
+    public $is_go_grouper =1;
     public function actionIndex()
     {
         $where='';
@@ -239,11 +240,21 @@ class PiringMangkokController extends \yii\web\Controller
 
             $billing = $data->billing_inacbg;
             foreach ($billing as $bill){
-                $tarif[$bill['f2']] = $bill['f3'];
+                if (empty($bill['f2'])){
+                        $tarif['prosedur_non_bedah'] = $billing[0]['f3'] + $bill['f3'];
+
+
+                }else{
+                    $tarif[$bill['f2']] = $bill['f3'];
+
+                }
 
             }
 
+
+
             $total_tagihan = json_encode($tarif);
+//            var_dump($total_tagihan);die();
 
             $icus = $data->ruang_rawat_px;
             $jICU = 0;
@@ -363,6 +374,7 @@ class PiringMangkokController extends \yii\web\Controller
              $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
             /*uncomment konek*/
 
+//             var_dump($dt);die();
              $metadata = $dt['metadata'];
         var_dump($metadata);die();
              if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
@@ -384,13 +396,15 @@ class PiringMangkokController extends \yii\web\Controller
                      ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
 
                  echo json_encode($metadata);
-//                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
+
+                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
 ////                     $this->grouper_stage_1($nosep,$param);
-//                     $this->grouper_stage_1($param);
-//                 }
+                     $this->grouper_stage_1($nosep,$param);
+                 }
              }
              else{
-                $this->delete_claim($nosep,$param);
+                 $this->delete_all_file($nosep,$param);
+//                 $this->delete_claim($nosep,$param);
                  $item['code'] 	= $metadata['code'];
                  $item['message'] = $metadata['message'];
                  $item['error_no'] = $metadata['error_no'];
@@ -420,11 +434,15 @@ class PiringMangkokController extends \yii\web\Controller
 				}
 			}';
             $data = $this->connect_inacbg($request,$dt->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+            var_dump($data);die();
             $metadata = $data['metadata'];
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 if($this->is_go_grouper != '0'){
                     $hasil = $data['response'];
+//
                     $tarif = $data['tarif_alt'][$surety_class_id-1];
+//                    var_dump("dsada");
+
                     if($dt->srv_type == 'RI'){
                         if($dt->visit_class_id >4){ // bila naik ke vip, maka ambil kelas 1
                             $visit_class_id = 2;
@@ -499,7 +517,6 @@ class PiringMangkokController extends \yii\web\Controller
 
     }
 
-//    public function actionUploadberkas($visit_id)
     public function actionUploadberkas($visit_id,$nosep)
     {
         $model = PiringMangkok::find()->where(['visit_id'=>$visit_id])->all();
@@ -538,6 +555,7 @@ class PiringMangkokController extends \yii\web\Controller
 		 	    },
 		 	    "data": "'.$content.'"
 		 	}';
+
 
          $act = $this->connect_inacbg($request,$model[0]['surety_id'],$this->bpjs_surety_id,$this->jamkesda_surety_id);
 //    var_dump($act);die();
@@ -610,6 +628,7 @@ class PiringMangkokController extends \yii\web\Controller
 				where s.visit_id = '$visit_id' and parentgroup != '$parent'
 				order by tanggal asc ";
         $tgl_checkup=Yii::$app->db->createCommand($sql)->queryAll();
+//        header tabel
         $all1 = "";
         $all1 .= "
             <tr>
@@ -619,7 +638,7 @@ class PiringMangkokController extends \yii\web\Controller
         }
         $all1 .="</tr>";
 
-
+//        hasil
         $sql ="SELECT bill_name ,namecheck, ms_check_id
 				from yanmed.checkup c
 				join yanmed.ms_check mc on c.ms_check_id = mc.idcheck
@@ -663,9 +682,21 @@ class PiringMangkokController extends \yii\web\Controller
             $all .="</tr>";
         }
 
+//        foreach ($model[0]->hasil_penunjang as $leb){
+//            $all .= "
+//            <tr><td  style='border-top: 0px; border-left: 0px;border-bottom: 0px;'></td><td>&nbsp;&nbsp;".$leb['f3']."<td>";
+//            foreach ($leb['f5'] as $value) {
+//                $hasil = isset($leb['f4']) ? $leb['f4'] : "";
+//
+//                $all .="<td align='center'>".$hasil."</td>";
+//
+//            }
+//            $all .="</tr>";
+//        }
+
 
         $data['all2']= $all;
-        $data['all1']= $all1;
+        $data['all1']= $all1;//header
 
         $pdf = new Pdf;
         $pdf->content=$this->renderPartial('v_berkas_lab',['model'=>$model,'tgl_checkup'=>$tgl_checkup,'data'=>$data]);
@@ -739,33 +770,29 @@ class PiringMangkokController extends \yii\web\Controller
             $metadata = $dt['metadata'];
 
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
-                $this->delete_all_file($nosep,$param);
                 return "berhasil";
             }
             else{
+//                echo $metadata['message'];
                 return $metadata['message'];
             }
         }
 
     }
 
-    public function delete_all_file($sep_no=0,$param)
+    public function delete_all_file($nosep,$param)
 	{
-
-
-
             $request = '{
 						"metadata": {        
 							"method": "file_get"    
 						},    
 						"data": {        
-							"nomor_sep": "'.$sep_no.'"    
+							"nomor_sep": "'.$nosep.'"    
 						} 
 					}';
 
             $act = $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
-//                var_dump($act);die();
             if ($act['response']['count'] > 0) {
                 $berkas = $act['response']['data'];
                 foreach ($berkas as $key => $value) {
@@ -774,16 +801,20 @@ class PiringMangkokController extends \yii\web\Controller
 									"method": "file_delete"    
 								},    
 								"data": {        
-									"nomor_sep": "'.$sep_no.'",
+									"nomor_sep": "'.$nosep.'",
 									"file_id"  : "'.$value['file_id'].'"    
 								} 
 							}';
                     $act = $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
                 }
+                $this->delete_claim($nosep,$param);
                 return "OK";
+//                echo "Ok";
             }else{
+                $this->delete_claim($nosep,$param);
                 return "OK";
+//                echo "ok";
             }
 
 
