@@ -366,8 +366,8 @@ class PiringMangkokController extends \yii\web\Controller
              $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
             /*uncomment konek*/
 
+//             var_dump($dt);die();
              $metadata = $dt['metadata'];
-//             var_dump($metadata);die();
 
              if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 $this->actionUploadberkas($param[0]['visit_id'],$nosep);
@@ -395,7 +395,8 @@ class PiringMangkokController extends \yii\web\Controller
                  }
              }
              else{
-//                 $this->delete_claim($param);
+                 $this->delete_all_file($nosep,$param);
+//                 $this->delete_claim($nosep,$param);
                  $item['code'] 	= $metadata['code'];
                  $item['message'] = $metadata['message'];
                  $item['error_no'] = $metadata['error_no'];
@@ -740,14 +741,14 @@ class PiringMangkokController extends \yii\web\Controller
         return $act;
     }
 
-    function delete_claim($param){
+    function delete_claim($nosep,$param){
         foreach ($param as $data){
             $request = '{
 				"metadata": {
 					"method":"delete_claim"
 				},
 				"data": {
-					"nomor_sep":"'.$data->sep_no.'",
+					"nomor_sep":"'.$nosep.'",
 					"coder_nik": "245"
 
 				}
@@ -756,30 +757,29 @@ class PiringMangkokController extends \yii\web\Controller
             $metadata = $dt['metadata'];
 
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
-                $this->delete_all_file($param);
                 return "berhasil";
             }
             else{
+//                echo $metadata['message'];
                 return $metadata['message'];
             }
         }
 
     }
 
-    public function delete_all_file($param)
+    public function delete_all_file($nosep,$param)
 	{
             $request = '{
 						"metadata": {        
 							"method": "file_get"    
 						},    
 						"data": {        
-							"nomor_sep": "'.$param[0]->sep_no.'"    
+							"nomor_sep": "'.$nosep.'"    
 						} 
 					}';
 
             $act = $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
-                var_dump($act);die();
             if ($act['response']['count'] > 0) {
                 $berkas = $act['response']['data'];
                 foreach ($berkas as $key => $value) {
@@ -788,16 +788,20 @@ class PiringMangkokController extends \yii\web\Controller
 									"method": "file_delete"    
 								},    
 								"data": {        
-									"nomor_sep": "'.$sep_no.'",
+									"nomor_sep": "'.$nosep.'",
 									"file_id"  : "'.$value['file_id'].'"    
 								} 
 							}';
                     $act = $this->connect_inacbg($request,null,$this->bpjs_surety_id,$this->jamkesda_surety_id);
 
                 }
+                $this->delete_claim($nosep,$param);
                 return "OK";
+//                echo "Ok";
             }else{
+                $this->delete_claim($nosep,$param);
                 return "OK";
+//                echo "ok";
             }
 
 
