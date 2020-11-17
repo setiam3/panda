@@ -9,6 +9,7 @@ class PiringMangkokController extends \yii\web\Controller
 {
     public $bpjs_surety_id="2";
     public $jamkesda_surety_id="113";
+    public $is_go_grouper =1;
     public function actionIndex()
     {
         $where='';
@@ -388,10 +389,10 @@ class PiringMangkokController extends \yii\web\Controller
                      ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
 
                  echo json_encode($metadata);
-                 $is_go_grouper =1;
-                 if(is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
+
+                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
 ////                     $this->grouper_stage_1($nosep,$param);
-                     $this->grouper_stage_1($param);
+                     $this->grouper_stage_1($nosep,$param);
                  }
              }
              else{
@@ -426,11 +427,15 @@ class PiringMangkokController extends \yii\web\Controller
 				}
 			}';
             $data = $this->connect_inacbg($request,$dt->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
+            var_dump($data);die();
             $metadata = $data['metadata'];
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 if($this->is_go_grouper != '0'){
                     $hasil = $data['response'];
+//
                     $tarif = $data['tarif_alt'][$surety_class_id-1];
+//                    var_dump("dsada");
+
                     if($dt->srv_type == 'RI'){
                         if($dt->visit_class_id >4){ // bila naik ke vip, maka ambil kelas 1
                             $visit_class_id = 2;
@@ -543,6 +548,7 @@ class PiringMangkokController extends \yii\web\Controller
 		 	    },
 		 	    "data": "'.$content.'"
 		 	}';
+
 
          $act = $this->connect_inacbg($request,$model[0]['surety_id'],$this->bpjs_surety_id,$this->jamkesda_surety_id);
 //    var_dump($act);die();
