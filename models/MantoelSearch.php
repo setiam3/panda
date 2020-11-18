@@ -41,7 +41,8 @@ class MantoelSearch extends PiringMangkok
             'visit_id_klaim',
             'unit_layanan',
                 'sep_tgl',
-                'krs'
+                'krs',
+                'tagihan_pelayanan'
             ],'safe'],
         ];
     }

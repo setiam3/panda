@@ -173,7 +173,7 @@ class PiringMangkokController extends \yii\web\Controller
             }else{
                 $covid19_status_cd = 0;
             }
-        var_dump($covid19_status_cd);die();
+//        var_dump($covid19_status_cd);die();
 
             $jenis = $data->kelas_pelayanan; //jumlah naik kelas
             foreach ($jenis as $js){
@@ -434,7 +434,7 @@ class PiringMangkokController extends \yii\web\Controller
 				}
 			}';
             $data = $this->connect_inacbg($request,$dt->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
-            var_dump($data);die();
+//            var_dump($data);die();
             $metadata = $data['metadata'];
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 if($this->is_go_grouper != '0'){
