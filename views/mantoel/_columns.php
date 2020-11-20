@@ -9,7 +9,7 @@ return [
         'width' => '30px',
     ],
 
-    [ 'class'=>'\kartik\grid\DataColumn',
+    [ 'class'=>'\kartik\grid\DataColumn','label'=>'Tanggal Masuk',
         'attribute'=>'visit_date',
         'filterType' => GridView::FILTER_DATE_RANGE,
         'filterWidgetOptions' => ([
@@ -25,7 +25,7 @@ return [
             ],
         ]),
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'tgl pulang'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'Tanggal Pulang'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS'],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS',
 //        'filterType' => \kartik\grid\GridView::FILTER_SELECT2,
@@ -33,25 +33,40 @@ return [
 //        'filterWidgetOptions' => [
 //            'pluginOptions' => ['allowClear' => true],]
 //    ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_name', 'label'=>'jenis pinjaman'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', 'label'=>'pelayanan'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan', 'label'=>'unit',
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_name', 'label'=>'jenis pinjaman'],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', 'label'=>'pelayanan'],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan', 'label'=>'unit',
+//        'value'=>function($data){
+//            foreach ($data->unit_layanan as $row){
+//                $s[] = $row['f2'];
+//            }
+//            return json_encode($s);
+//        }
+//    ],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'Nama Pasien'],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', 'label'=>'visit'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate',
         'value'=>function($data){
-            foreach ($data->unit_layanan as $row){
-                $s[] = $row['f2'];
+    $now = new DateTime();
+    $date = new DateTime($data->px_birthdate);
+            $usia = $now->diff($date)->y;
+            return $data->px_birthdate.'('.$usia.')';
+        }, 'label'=>'Tanggal Lahir'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'No Rekam Medis'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'No Identitas (NIK)'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', 'label'=>'No Kartu BPJS'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', 'label'=>'no SEP'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_tgl', 'label'=>'Tanggal SEP'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tagihan_pelayanan', 'label'=>'Retribusi',
+        'value'=>function($data){
+            $s = [];
+            foreach ($data->tagihan_pelayanan as $row){
+                if ($row['f2'] == 'PENDAFTARAN'){
+                    $s []= 'Rp. '.$row['f4'];
+                }
             }
             return json_encode($s);
-        }
-    ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'nama Pasien'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', 'label'=>'visit'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate', 'label'=>'tgl lahir'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'no RM'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'No NIK'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', 'label'=>'no BPJS'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', 'label'=>'no SEP'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_tgl', 'label'=>'tgl SEP'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_meninggal', 'label'=>'tgl meninggal'],
+        }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kelas_pelayanan',
         'value'=>function($data){
             foreach ($data->kelas_pelayanan as $row){
@@ -59,38 +74,44 @@ return [
             }
             return json_encode($s);
         },
-        'label'=>'hak kelas',
+        'label'=>'Hak kelas',
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang_rawat_px',
         'value'=>function($data){
             foreach ($data->ruang_rawat_px as $row){
-                $s[] = $row['f3']." ( ". $row['f1'].' - '.$row['f2'].") ". $row['f4'];
+                if ($row['f3'] != 'LAB PK'){
+                    $s[] = $row['f3']." ( ". $row['f1'].' - '.$row['f2'].") ". $row['f4'];
+
+                }elseif ($row['f3'] == 'RADIOLOGI'){
+                    $s[] = $row['f3']." ( ". $row['f1'].' - '.$row['f2'].") ". $row['f4'];
+                }
             }
             return json_encode($s);
         },
-        'label'=>'tempat layanan',
+        'label'=>'Tempat Layanan',
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_doctor_name', 'label'=>'DPJP'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_cause_id', 'label'=>'cara pulang',
-        'value'=>function($data){
-            if ($data->visit_end_cause_id == "52"){
-                $s = "Meninggal";
-            }elseif ($data->visit_end_cause_id == "54"){
-                $s = "Atas Permintaan Sendiri";
-            }elseif ($data->visit_end_cause_id == "50"){
-                $s = "Dirujuk";
-            }elseif ($data->visit_end_cause_id == "57"){
-                $s = "Melarikan Diri";
-            }elseif ($data->visit_end_cause_id == "55"){
-                $s = "(-)";
-            }elseif ($data->visit_end_cause_id == "48"){
-                $s = "Atas Persetujuan Dokter";
-            }else{
-                $s = "null";
-            }
-            return $s;
-        }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_doctor_name', 'label'=>'kejadian meninggal'],//kosong
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'cara_pulang', 'label'=>'Cara Pulang'],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_cause_id', 'label'=>'Cara Pulang',
+//        'value'=>function($data){
+//            if ($data->visit_end_cause_id == "52"){
+//                $s = "Meninggal";
+//            }elseif ($data->visit_end_cause_id == "54"){
+//                $s = "Atas Permintaan Sendiri";
+//            }elseif ($data->visit_end_cause_id == "50"){
+//                $s = "Dirujuk";
+//            }elseif ($data->visit_end_cause_id == "57"){
+//                $s = "Melarikan Diri";
+//            }elseif ($data->visit_end_cause_id == "55"){
+//                $s = "(-)";
+//            }elseif ($data->visit_end_cause_id == "48"){
+//                $s = "Atas Persetujuan Dokter";
+//            }else{
+//                $s = "null";
+//            }
+//            return $s;
+//        }],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_meninggal', 'label'=>'Kejadian Meninggal'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', 'label'=>'Status KLB'],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'Diagnosa Primer',
@@ -154,6 +175,12 @@ return [
         }],
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'terapi',
         'value'=>function($data){
+//            $s = [];
+//            foreach ($data->list_obat as $row){
+//                $s[] = $row['f1'].$row['f3'];
+//            }
+//            return json_encode($s);
+
             return json_encode($data->list_obat);
         },
     ],
@@ -250,7 +277,7 @@ return [
             return json_encode($tarifRS);
         }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'status_grouper', 'label'=>'status'],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'status_grouper', 'label'=>'status'],
 
 ];
 

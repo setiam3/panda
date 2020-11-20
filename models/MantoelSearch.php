@@ -24,7 +24,7 @@ class MantoelSearch extends PiringMangkok
             'visit_status',
             'sep_no',
             'pxsurety_no',
-            'visit_end_date',
+//            'visit_end_date',
             'ruang_rawat_px',
             'jns_layanan',
             'class_id',
@@ -41,9 +41,10 @@ class MantoelSearch extends PiringMangkok
             'grouper_code',
             'visit_id_klaim',
             'unit_layanan',
-                'sep_tgl',
-                'krs',
-                'tagihan_pelayanan'
+//            'sep_tgl',
+            'krs',
+            'tagihan_pelayanan',
+            'cara_pulang'
             ],'safe'],
         ];
     }
@@ -52,14 +53,9 @@ class MantoelSearch extends PiringMangkok
     {
         return Model::scenarios();
     }
-    public function search($params, $jenis_penjamin = null,$pelayanan=null,$unit_layanan=null,$createTimeStart=null,$createTimeEnd=null)
+    public function search($params)
     {
-        $unit = new Expression('lower(unit_layanan::text) like \'%'.strtolower($unit_layanan).'%\'');
         $query = PiringMangkok::find();
-//            ->where(['=','surety_name',$jenis_penjamin])
-//            ->andWhere(['=','jns_layanan',$pelayanan])
-//            ->andWhere($unit)
-//            ->andWhere(['between','visit_date',$createTimeStart,$createTimeEnd]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -83,11 +79,11 @@ class MantoelSearch extends PiringMangkok
             'class_id'=>$this->class_id,
             'visit_end_cause_id'=>$this->visit_end_cause_id,
             ]);
-//        $dates = explode(' - ', $this->visit_date);
-//        if((bool) strtotime($dates[0]) && (bool) strtotime ($dates[1])) {
-//            $this->createTimeStart = $dates[0];
-//            $this->createTimeEnd = $dates[1];
-//        }
+        $dates = explode(' - ', $this->visit_date);
+        if((bool) strtotime($dates[0]) && (bool) strtotime ($dates[1])) {
+            $this->createTimeStart = $dates[0];
+            $this->createTimeEnd = $dates[1];
+        }
         $unit = new Expression('lower(unit_layanan::text) like \'%'.strtolower($this->unit_layanan).'%\'');
         $kelas_pelayanan = new Expression('lower(kelas_pelayanan::text) like \'%'.strtolower($this->kelas_pelayanan).'%\'');
         $ruang_rawat = new Expression('lower(ruang_rawat_px::text) like \'%'.strtolower($this->ruang_rawat_px).'%\'');
@@ -101,24 +97,24 @@ class MantoelSearch extends PiringMangkok
             ->andFilterWhere(['like', 'lower(surety_name)', strtolower($this->surety_name)])
             ->andFilterWhere(['like', 'sep_no', $this->sep_no])
             ->andFilterWhere(['like', 'pxsurety_no', $this->pxsurety_no])
-            ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
+//            ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
+//            ->andFilterWhere(['like', 'visit_end_date', $this->createTimeEnd])
             ->andFilterWhere(['like', 'text(ruang_rawat_px)', $this->ruang_rawat_px])
-//            ->andWhere($ruang_rawat)
+            ->andWhere($ruang_rawat)
             ->andFilterWhere(['like', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
 //            ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
-//            ->andWhere($kelas_pelayanan)
+            ->andWhere($kelas_pelayanan)
 //            ->andFilterWhere(['like', 'diagnosa_px', $this->diagnosa_px])
-//            ->andWhere($diagnosa)
+            ->andWhere($diagnosa)
             ->andFilterWhere(['like', 'tindakan_px', $this->tindakan_px])
             ->andFilterWhere(['like', 'billing_inacbg', $this->billing_inacbg])
             ->andFilterWhere(['like', 'visit_end_doctor_name', $this->visit_end_doctor_name])
             ->andFilterWhere(['like', 'lower(klb_name)', strtolower($this->klb_name)])
             ->andFilterWhere(['like', 'status_grouper', $this->status_grouper])
             ->andFilterWhere(['like', 'grouper_code', $this->grouper_code])
-            ->andFilterWhere(['like', 'krs', $this->krs]);
-
+            ->andFilterWhere(['like', 'krs', $this->krs])
 //            ->andFilterWhere(['like', 'unit_layanan',(string)$this->unit_layanan]);
-//            ->andWhere($unit);
+            ->andWhere($unit);
         return $dataProvider;
     }
 }

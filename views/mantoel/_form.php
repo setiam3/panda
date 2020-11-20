@@ -15,10 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="mantoel-form">
     <h1><?= Html::encode($this->title) ?></h1>
     <?php $form = ActiveForm::begin([
-            'action' => ['mantoel/preview'],'options' => ['method' => 'get']]) ?>
+            'action' => \yii\helpers\Url::to(['mantoel/preview']),'method' => 'get',]) ?>
     <div class="col-md-6">
         <?= $form->field($model, 'surety_name')->widget(\kartik\select2\Select2::classname(),[
-            'data' => \yii\helpers\ArrayHelper::map(\app\models\PiringMangkok::find()->all(),'surety_name','surety_name'),
+            'data' => \yii\helpers\ArrayHelper::map(\app\models\MantoelSearch::find()->all(),'surety_name','surety_name'),
             'language' => 'de',
             'options' => ['placeholder' => 'Select a state ...'],
             'pluginOptions' => [
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ])->label('tanggal kunjung') ?>
         <?= $form->field($model, 'jns_layanan')->widget(\kartik\select2\Select2::classname(),[
-            'data' => \yii\helpers\ArrayHelper::map(\app\models\PiringMangkok::find()
+            'data' => \yii\helpers\ArrayHelper::map(\app\models\MantoelSearch::find()
                 ->all(),'jns_layanan','jns_layanan'),
             'language' => 'de',
             'options' => ['placeholder' => 'Select a state ...'],
