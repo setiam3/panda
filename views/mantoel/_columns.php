@@ -57,7 +57,7 @@ return [
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', 'label'=>'No Kartu BPJS'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', 'label'=>'no SEP'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_tgl', 'label'=>'Tanggal SEP'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tagihan_pelayanan', 'label'=>'Retribusi',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'retribusi', 'label'=>'Retribusi',
         'value'=>function($data){
             $s = [];
             foreach ($data->tagihan_pelayanan as $row){
@@ -131,7 +131,7 @@ return [
             return json_encode($s);
         }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Diagnosa Sekunder','label'=>'Diagnosa Sekunder',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_pxs','label'=>'Diagnosa Sekunder',
         'value'=>function($data){
             $s=[];
             foreach ($data->diagnosa_px as $row){
@@ -146,7 +146,7 @@ return [
             return json_encode($s);
         }],
 
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_penunjang', 'label'=>'hasil laboratorium',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium',
         'value'=>function($data){
             $s=[];
             foreach($data->hasil_penunjang as $row){
@@ -164,7 +164,7 @@ return [
             }
             return json_encode($s);
         }],
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_penunjang', 'format'=>'html', 'label'=>'hasil radiologi',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'hasil radiologi',
         'value'=>function($data){
             $s=[];
             foreach($data->hasil_penunjang as $row){
@@ -186,7 +186,7 @@ return [
             return json_encode($data->list_obat);
         },
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Pemulasaraan jenazah',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pemulasaraan_jenazah',
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){
@@ -197,7 +197,7 @@ return [
             }
             return json_encode($s);
         }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kantong jenazah',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kantong_jenazah',
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){
@@ -209,7 +209,7 @@ return [
             return json_encode($s);
         }],
 //
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'peti jenazah',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'peti_jenazah',
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){
@@ -221,7 +221,7 @@ return [
             return json_encode($s);
         }],
 //
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'plastik jenazah',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'plastik_jenazah',
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){
@@ -233,7 +233,7 @@ return [
             return json_encode($s);
         }],
 //
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Desinfektan jenazah',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'desinfektan_jenazah',
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){
@@ -245,7 +245,7 @@ return [
             return json_encode($s);
         }],
 //
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'transport Mobil',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'transport_mobil',
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){
@@ -257,7 +257,7 @@ return [
             return json_encode($s);
         }],
 //
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'Desinfektan Mobil jenazah',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'desinfektan_mobil',
         'value'=>function($data){
             $s=[];
             foreach ($data->tagihan_pelayanan as $row){

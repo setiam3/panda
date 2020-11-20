@@ -5,8 +5,8 @@ use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use kartik\widgets\SwitchInput;
 
-$this->title = 'Create Kontak';
-$this->params['breadcrumbs'][] = ['label' => 'Kontaks', 'url' => ['index']];
+$this->title = 'Form Mantoel';
+$this->params['breadcrumbs'][] = ['label' => 'Mantoel', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ])->label('unit pelayanan') ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Preview', ['class' => 'btn btn-success']) ?>
         </div>
 
 
