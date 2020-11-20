@@ -3,6 +3,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 
 class MantoelSearch extends PiringMangkok
 {
@@ -51,9 +52,14 @@ class MantoelSearch extends PiringMangkok
     {
         return Model::scenarios();
     }
-    public function search($params, $where = null)
+    public function search($params, $jenis_penjamin = null,$pelayanan=null,$unit_layanan=null,$createTimeStart=null,$createTimeEnd=null)
     {
-        $query = PiringMangkok::find()->where($where);
+        $unit = new Expression('lower(unit_layanan::text) like \'%'.strtolower($unit_layanan).'%\'');
+        $query = PiringMangkok::find();
+//            ->where(['=','surety_name',$jenis_penjamin])
+//            ->andWhere(['=','jns_layanan',$pelayanan])
+//            ->andWhere($unit)
+//            ->andWhere(['between','visit_date',$createTimeStart,$createTimeEnd]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -77,33 +83,42 @@ class MantoelSearch extends PiringMangkok
             'class_id'=>$this->class_id,
             'visit_end_cause_id'=>$this->visit_end_cause_id,
             ]);
-        $dates = explode(' - ', $this->visit_date);
-        if((bool) strtotime($dates[0]) && (bool) strtotime ($dates[1])) {
-            $this->createTimeStart = $dates[0];
-            $this->createTimeEnd = $dates[1];
-        }
+//        $dates = explode(' - ', $this->visit_date);
+//        if((bool) strtotime($dates[0]) && (bool) strtotime ($dates[1])) {
+//            $this->createTimeStart = $dates[0];
+//            $this->createTimeEnd = $dates[1];
+//        }
+        $unit = new Expression('lower(unit_layanan::text) like \'%'.strtolower($this->unit_layanan).'%\'');
+        $kelas_pelayanan = new Expression('lower(kelas_pelayanan::text) like \'%'.strtolower($this->kelas_pelayanan).'%\'');
+        $ruang_rawat = new Expression('lower(ruang_rawat_px::text) like \'%'.strtolower($this->ruang_rawat_px).'%\'');
+        $diagnosa = new Expression('lower(diagnosa_px::text) like \'%'.strtolower($this->diagnosa_px).'%\'');
         $query
             ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
-            ->andFilterWhere(['like', 'px_name', $this->px_name])
-            ->andFilterWhere(['like', 'px_sex', $this->px_sex])
-            ->andFilterWhere(['like', 'px_address', $this->px_address])
-            ->andFilterWhere(['like', 'surety_name', $this->surety_name])
+            ->andFilterWhere(['like', 'lower(px_name)', strtolower($this->px_name)])
+            ->andFilterWhere(['like', 'lower(px_sex)', strtolower($this->px_sex)])
+            ->andFilterWhere(['like', 'lower(px_address)', strtolower($this->px_address)])
+            ->andFilterWhere(['like', 'lower(surety_name)', strtolower($this->surety_name)])
             ->andFilterWhere(['like', 'sep_no', $this->sep_no])
             ->andFilterWhere(['like', 'pxsurety_no', $this->pxsurety_no])
             ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
-            ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px])
-            ->andFilterWhere(['like', 'jns_layanan', $this->jns_layanan])
-            ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
-            ->andFilterWhere(['like', 'diagnosa_px', $this->diagnosa_px])
+            ->andFilterWhere(['like', 'text(ruang_rawat_px)', $this->ruang_rawat_px])
+//            ->andWhere($ruang_rawat)
+            ->andFilterWhere(['like', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
+//            ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
+//            ->andWhere($kelas_pelayanan)
+//            ->andFilterWhere(['like', 'diagnosa_px', $this->diagnosa_px])
+//            ->andWhere($diagnosa)
             ->andFilterWhere(['like', 'tindakan_px', $this->tindakan_px])
             ->andFilterWhere(['like', 'billing_inacbg', $this->billing_inacbg])
             ->andFilterWhere(['like', 'visit_end_doctor_name', $this->visit_end_doctor_name])
-            ->andFilterWhere(['like', 'klb_name', $this->klb_name])
+            ->andFilterWhere(['like', 'lower(klb_name)', strtolower($this->klb_name)])
             ->andFilterWhere(['like', 'status_grouper', $this->status_grouper])
             ->andFilterWhere(['like', 'grouper_code', $this->grouper_code])
-            ->andFilterWhere(['like', 'krs', $this->krs])
-            ->andFilterWhere(['like', 'unit_layanan', $this->unit_layanan]);
+            ->andFilterWhere(['like', 'krs', $this->krs]);
+
+//            ->andFilterWhere(['like', 'unit_layanan',(string)$this->unit_layanan]);
+//            ->andWhere($unit);
         return $dataProvider;
     }
 }

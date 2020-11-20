@@ -26,12 +26,13 @@ return [
         ]),
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'tgl pulang'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS',
-        'filterType' => \kartik\grid\GridView::FILTER_SELECT2,
-        'filter' => ['sudah krs'=>'Sudah KRS','belum krs'=>'Belum KRS'],
-        'filterWidgetOptions' => [
-            'pluginOptions' => ['allowClear' => true],]
-    ],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS'],
+//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS',
+//        'filterType' => \kartik\grid\GridView::FILTER_SELECT2,
+//        'filter' => ['sudah krs'=>'Sudah KRS','belum krs'=>'Belum KRS'],
+//        'filterWidgetOptions' => [
+//            'pluginOptions' => ['allowClear' => true],]
+//    ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_name', 'label'=>'jenis pinjaman'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', 'label'=>'pelayanan'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan', 'label'=>'unit',
@@ -92,7 +93,7 @@ return [
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_doctor_name', 'label'=>'kejadian meninggal'],//kosong
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', 'label'=>'Status KLB'],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa primer',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'Diagnosa Primer',
         'value'=>function($data){
             $s=[];
             foreach ($data->diagnosa_px as $row){
@@ -107,7 +108,7 @@ return [
             return json_encode($s);
         }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa sekunder',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'Diagnosa Sekunder','label'=>'Diagnosa Sekunder',
         'value'=>function($data){
             $s=[];
             foreach ($data->diagnosa_px as $row){
