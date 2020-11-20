@@ -68,27 +68,7 @@ return [
             return json_encode($s);
         }
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'nama Pasien'],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', 'label'=>'visit'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate', 'label'=>'tgl lahir'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'no RM',],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'No NIK'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', 'label'=>'no BPJS'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', 'label'=>'no SEP'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_tgl', 'label'=>'tgl SEP'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tagihan_pelayanan', 'label'=>'Retribusi',
-        'value'=>function($data){
-            $s=[];
-            foreach ($data->tagihan_pelayanan as $row){
-                if ($row['f2'] == "PENDAFTARAN"){
-                    $s = $row['f3'].": ".$row['f4'];
-                }
-            }
-            return json_encode($s);
-        }
-    ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_meninggal', 'label'=>'tgl meninggal'],
-
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kelas_pelayanan',
         'value'=>function($data){
             foreach ($data->kelas_pelayanan as $row){
@@ -96,7 +76,7 @@ return [
             }
             return json_encode($s);
         },
-        'label'=>'Hak kelas',
+        'label'=>'Hak Kelas',
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang_rawat_px',
         'value'=>function($data){
@@ -289,7 +269,7 @@ return [
             return json_encode($s);
         }],
 
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'billing_inacbg','label'=>'tarif RS',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'billing_inacbg','label'=>'Total Tarif RS',
         'value'=>function($data){
             $tarifRS=0;
             foreach ($data->billing_inacbg as $row){
