@@ -65,7 +65,8 @@ return [
                     $s []= 'Rp. '.$row['f4'];
                 }
             }
-            return json_encode($s);
+//            return json_encode($s);
+            return implode($s,',');
         }
     ],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', 'label'=>'visit'],
@@ -74,7 +75,8 @@ return [
             foreach ($data->kelas_pelayanan as $row){
                 $s[] = $row['f3'];
             }
-            return json_encode($s);
+//            return json_encode($s);
+            return implode($s,', ');
         },
         'label'=>'Hak Kelas',
     ],
@@ -88,7 +90,8 @@ return [
                     $s[] = $row['f3']." ( ". $row['f1'].' - '.$row['f2'].") ". $row['f4'];
                 }
             }
-            return json_encode($s);
+//            return json_encode($s);
+            return implode($s,', ');
         },
         'label'=>'Tempat Layanan',
     ],
@@ -128,7 +131,8 @@ return [
                     $s[]='null';
                 }
             }
-            return json_encode($s);
+//            return json_encode($s);
+            return implode($s,', ');
         }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_pxs','label'=>'Diagnosa Sekunder',
@@ -143,7 +147,8 @@ return [
                     $s[]='null';
                 }
             }
-            return json_encode($s);
+//            return json_encode($s);
+            return implode($s,', ');
         }],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium',
@@ -162,7 +167,8 @@ return [
                 }
 
             }
-            return json_encode($s);
+//            return json_encode($s);
+            return implode($s,', ');
         }],
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'hasil radiologi',
         'value'=>function($data){

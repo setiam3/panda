@@ -20,7 +20,7 @@ class MantoelSearch extends PiringMangkok
 //            'diagnosa_px',
 //            'diagnosa_pxs',
             'tindakan_px',
-            'billing_inacbg',
+//            'billing_inacbg',
             'visit_end_doctor_name',
             'klb_id',
             'klb_name',
@@ -60,10 +60,19 @@ class MantoelSearch extends PiringMangkok
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-
+            'sort' =>false
         ]);
 
-        $this->load($params);
+//        $dataProvider->setSort([
+//            'attributes' => [
+//                'retribusi' => [
+//                    'asc' => ['tagihan_pelayanan' => SORT_ASC],
+//                    'desc' => ['tagihan_pelayanan' => SORT_DESC],
+//                    'label' => 'Your_label',
+//                    'default' => SORT_ASC
+//                ],'defaultOrder' => [ 'retribusi' => SORT_DESC ],],]);
+
+                $this->load($params);
         if (!$this->validate()) {
             return $dataProvider;
         }
