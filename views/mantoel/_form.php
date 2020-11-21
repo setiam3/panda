@@ -47,6 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'allowClear' => true
             ],
         ])->label('pelayana') ?>
+
+
         <?= $form->field($model, 'unit_layanan')->widget(\kartik\select2\Select2::classname(),[
             'data' => \yii\helpers\ArrayHelper::map((new \yii\db\Query())
                 ->from('admin.ms_unit')
@@ -57,9 +59,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ->orWhere(['like','unit_name','RUANGAN'])
                 ->all(),'unit_name','unit_name'),
             'language' => 'de',
-            'options' => ['placeholder' => 'Select a state ...'],
+            'maintainOrder' => true,
+            'options' => ['placeholder' => 'Select a state ...','multiple' => true],
             'pluginOptions' => [
-                'allowClear' => true
+                'tags' => true,
+                'maximumInputLength' => 10
             ],
         ])->label('unit pelayanan') ?>
 

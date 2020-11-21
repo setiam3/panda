@@ -19,13 +19,11 @@ class MantoelController extends \yii\web\Controller
 
     public function actionPreview(){
         $request = \Yii::$app->request;
-
-if (empty($request)){
-    $param = \Yii::$app->request->queryParams;
-}else{
-    $param=$request->queryParams;
-}
-//print_r($param);die();
+        if (empty($request)){
+            $param = \Yii::$app->request->queryParams;
+        }else{
+            $param=$request->queryParams;
+        }
         $searchModel = new MantoelSearch();
         $dataProvider = $searchModel->search($param);
         return $this->render('index', [

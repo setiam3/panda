@@ -56,6 +56,7 @@ class PiringMangkokSearch extends PiringMangkok
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
         $this->load($params);
         if (!$this->validate()) {
             return $dataProvider;

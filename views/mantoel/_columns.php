@@ -51,7 +51,7 @@ return [
     $date = new DateTime($data->px_birthdate);
             $usia = $now->diff($date)->y;
             return $data->px_birthdate.'('.$usia.')';
-        }, 'label'=>'Tanggal Lahir'],
+        }, 'label'=>'Tanggal Lahir (usia)'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'No Rekam Medis'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'No Identitas (NIK)'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', 'label'=>'No Kartu BPJS'],
