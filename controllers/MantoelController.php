@@ -51,9 +51,9 @@ class MantoelController extends \yii\web\Controller
 ////             echo "         'class'=>'\kartik\grid\DataColumn',\n";
 ////             echo "         'attribute'=>'" . $name . "',\n";
 ////             echo "     ],\n".'<br>';
-//            // echo " ->andFilterWhere(['like', '".$name."', \$this->".$name."])".'<br>';
+////             echo " ->andFilterWhere(['like', '".$name."', \$this->".$name."])".'<br>';
 ////
-//            echo "'".$name."',".'<br>';
+////            echo "'".$name."',".'<br>';
 //
 //        }
 //        echo "],'safe'],";

@@ -7,7 +7,7 @@ use yii\db\Expression;
 
 class MantoelSearch extends PiringMangkok
 {
-    public $createTimeStart,$createTimeEnd;
+    public $createTimeStart,$createTimeEnd,$tgl_pulang;
     public $diagnosa_pxs,$retribusi,$hasil_laborat,$hasil_radoilogi,$terapi,$pemulasaraan_jenazah,$kantong_jenazah,
         $peti_jenazah,$plastik_jenazah,$desinfektan_jenazah,$transport_mobil,$desinfektan_mobil;
     public function rules()
@@ -15,11 +15,12 @@ class MantoelSearch extends PiringMangkok
         return [
             [['visit_id', 'visit_date', 'px_id', 'px_norm', 'px_noktp', 'px_name', 'px_sex', 'px_address', 'surety_id',
             'surety_name', 'visit_status', 'sep_no', 'pxsurety_no',
-//            'visit_end_date',
+            'visit_end_date',
             'ruang_rawat_px', 'jns_layanan', 'class_id', 'visit_end_cause_id', 'kelas_pelayanan',
-//            'diagnosa_px',
-//            'diagnosa_pxs',
+            'diagnosa_px',
+            'diagnosa_pxs',
             'tindakan_px',
+            'px_birthdate',
 //            'billing_inacbg',
             'visit_end_doctor_name',
             'klb_id',
@@ -29,23 +30,25 @@ class MantoelSearch extends PiringMangkok
             'grouper_code',
             'visit_id_klaim',
             'unit_layanan',
-//            'sep_tgl',
+            'sep_tgl',
+            'tgl_meninggal',
+            'tgl_pulang',
             'krs',
             'tagihan_pelayanan',
             'cara_pulang',
-//            'hasil_laborat',
-//                'retribusi'
-//            'hasil_laborat',
-//                'hasil_penunjang'
-//                'hasil_radoilogi',
-//                'pemulasaraan_jenazah',
-//                'kantong_jenazah',
-//                'peti_jenazah',
-//                'plastik_jenazah',
-//                'desinfektan_jenazah',
-//                'transport_mobil',
-//                'desinfektan_mobil',
-//                'terapi'
+            'hasil_laborat',
+            'retribusi',
+            'hasil_laborat',
+            'hasil_penunjang',
+            'hasil_radoilogi',
+            'pemulasaraan_jenazah',
+            'kantong_jenazah',
+            'peti_jenazah',
+            'plastik_jenazah',
+            'desinfektan_jenazah',
+            'transport_mobil',
+            'desinfektan_mobil',
+            'terapi'
             ],'safe'],
         ];
     }
@@ -102,7 +105,7 @@ class MantoelSearch extends PiringMangkok
         $ruang_rawat = new Expression('lower(ruang_rawat_px::text) like \'%'.strtolower($this->ruang_rawat_px).'%\'');
         $diagnosa = new Expression('lower(diagnosa_px::text) like \'%'.strtolower($this->diagnosa_px).'%\'');
         $diagnosaS = new Expression('lower(diagnosa_px::text) like \'%'.strtolower($this->diagnosa_pxs).'%\'');
-//        $bretribusi = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->retribusi).'%\'');
+        $retribusi = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->retribusi).'%\'');
         $hasil_laborat = new Expression('lower(hasil_penunjang::text) like \'%'.strtolower($this->hasil_laborat).'%\'');
         $hasil_radoilogi = new Expression('lower(hasil_penunjang::text) like \'%'.strtolower($this->hasil_radoilogi).'%\'');
         $terapi = new Expression('lower(list_obat::text) like \'%'.strtolower($this->terapi).'%\'');
@@ -113,8 +116,14 @@ class MantoelSearch extends PiringMangkok
         $desinfektan_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_jenazah).'%\'');
         $transport_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->transport_mobil).'%\'');
         $desinfektan_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_mobil).'%\'');
+        $visit_date = new Expression('visit_date::date between\''.$this->createTimeStart.'\'and\''.$this->createTimeEnd.'\'');
+        $birthdate = new Expression('TO_CHAR (px_birthdate::date,\'dd-mm-yyyy\') LIKE \'%'.$this->px_birthdate.'%\'');
+        $tglsep = new Expression('TO_CHAR (sep_tgl::date,\'dd-mm-yyyy\') LIKE \'%'.$this->sep_tgl.'%\'');
+        $tglmeninggal = new Expression('TO_CHAR (tgl_meninggal::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_meninggal.'%\'');
+        $tgl_pulang = new Expression('TO_CHAR (visit_end_date::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_pulang.'%\'');
         $query
-            ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
+//            ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
+            ->andWhere($visit_date)
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
             ->andFilterWhere(['like', 'lower(px_name)', strtolower($this->px_name)])
             ->andFilterWhere(['like', 'lower(px_sex)', strtolower($this->px_sex)])
@@ -123,7 +132,10 @@ class MantoelSearch extends PiringMangkok
             ->andFilterWhere(['like', 'sep_no', $this->sep_no])
             ->andFilterWhere(['like', 'pxsurety_no', $this->pxsurety_no])
 //            ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
-//            ->andFilterWhere(['like', 'visit_end_date', $this->createTimeEnd])
+            ->andWhere($tgl_pulang)
+            ->andWhere($birthdate)
+            ->andWhere($tglsep)
+            ->andWhere($tglmeninggal)
 //            ->andFilterWhere(['like', 'text(ruang_rawat_px)', $this->ruang_rawat_px])
             ->andWhere($ruang_rawat)
             ->andFilterWhere(['like', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
@@ -138,18 +150,18 @@ class MantoelSearch extends PiringMangkok
             ->andFilterWhere(['like', 'status_grouper', $this->status_grouper])
             ->andFilterWhere(['like', 'grouper_code', $this->grouper_code])
             ->andFilterWhere(['like', 'krs', $this->krs])
-//            ->andWhere($bretribusi)
-//            ->andWhere($hasil_laborat)
-//            ->andWhere($hasil_radoilogi)
-//            ->andWhere($terapi)
-//            ->andWhere($pemulasaraan)
-//            ->andWhere($kantong_jenazah)
-//            ->andWhere($kantong_jenazah)
-//            ->andWhere($peti_jenazah)
-//            ->andWhere($plastik_jenazah)
-//            ->andWhere($desinfektan_jenazah)
-//            ->andWhere($transport_mobil)
-//            ->andWhere($desinfektan_mobil)
+            ->andWhere($retribusi)
+            ->andWhere($hasil_laborat)
+            ->andWhere($hasil_radoilogi)
+            ->andWhere($terapi)
+            ->andWhere($pemulasaraan)
+            ->andWhere($kantong_jenazah)
+            ->andWhere($kantong_jenazah)
+            ->andWhere($peti_jenazah)
+            ->andWhere($plastik_jenazah)
+            ->andWhere($desinfektan_jenazah)
+            ->andWhere($transport_mobil)
+            ->andWhere($desinfektan_mobil)
             ->andFilterWhere(['like', 'lower(cara_pulang)',strtolower($this->cara_pulang)])
 //            ->andFilterWhere(['like', 'unit_layanan',(string)$this->unit_layanan]);
             ->andWhere($unit);

@@ -10,6 +10,10 @@ return [
     ],
 
     [ 'class'=>'\kartik\grid\DataColumn','label'=>'Tanggal Masuk',
+        'value'=>function($data){
+            $visit =date('d-m-Y',strtotime($data->visit_date));
+            return $visit;
+        },
         'attribute'=>'visit_date',
         'filterType' => GridView::FILTER_DATE_RANGE,
         'filterWidgetOptions' => ([
@@ -18,14 +22,31 @@ return [
             'convertFormat' => false,
             'pluginOptions' => [
                 'separator' => ' - ',
-                'format' => 'YYYY-MM-DD',
+                'format' => 'DD-MM-YYYY',
                 'locale' => [
-                    'format' => 'YYYY-MM-DD'
+                    'format' => 'DD-MM-YYYY'
                 ],
             ],
         ]),
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'Tanggal Pulang'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_pulang', 'label'=>'Tanggal Pulang',
+        'value'=>function($data){
+            $visit_end_date = date('d-m-Y',strtotime($data->visit_end_date));
+            return $visit_end_date;
+        },
+//        'headerOptions' => ['style' => 'width:100%'],
+//        'format' => 'date',
+//        'filterType' => GridView::FILTER_DATE,
+//        'filterWidgetOptions' => [
+//            'size' => 'xs',
+//            'pluginOptions' => [
+//                'format' => 'DD-MM-YYYY',
+//                'autoWidget' => true,
+//                'autoclose' => true,
+//                'todayHighlight' => true
+//            ]
+//        ]
+    ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS'],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS',
 //        'filterType' => \kartik\grid\GridView::FILTER_SELECT2,
@@ -46,17 +67,36 @@ return [
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'Nama Pasien'],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', 'label'=>'visit'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate',
+
         'value'=>function($data){
     $now = new DateTime();
     $date = new DateTime($data->px_birthdate);
             $usia = $now->diff($date)->y;
-            return $data->px_birthdate.'('.$usia.')';
+            $tgl_lahir = date('d-m-Y',strtotime($data->px_birthdate));
+            return $tgl_lahir.'('.$usia.')';
         }, 'label'=>'Tanggal Lahir (usia)'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'No Rekam Medis'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'No Identitas (NIK)'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'No NIK'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', 'label'=>'No Kartu BPJS'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', 'label'=>'no SEP'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_tgl', 'label'=>'Tanggal SEP'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_tgl', 'label'=>'Tanggal SEP',
+        'value'=>function($data){
+            $sep=date('d-m-Y', strtotime($data->sep_tgl));
+            return $sep;
+        },
+//        'headerOptions' => ['style' => 'width:100%'],
+//        'format' => 'date',
+//        'filterType' => GridView::FILTER_DATE,
+//        'filterWidgetOptions' => [
+//            'size' => 'xs',
+//            'pluginOptions' => [
+//                'format' => 'DD-MM-YYYY',
+//                'autoWidget' => true,
+//                'autoclose' => true,
+//                'todayHighlight' => true
+//            ]
+//        ]
+    ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'retribusi', 'label'=>'Retribusi',
         'value'=>function($data){
             $s = [];
@@ -83,11 +123,14 @@ return [
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang_rawat_px',
         'value'=>function($data){
             foreach ($data->ruang_rawat_px as $row){
-                if ($row['f3'] != 'LAB PK'){
-                    $s[] = $row['f3']." ( ". $row['f1'].' - '.$row['f2'].") ". $row['f4'];
 
-                }elseif ($row['f3'] == 'RADIOLOGI'){
-                    $s[] = $row['f3']." ( ". $row['f1'].' - '.$row['f2'].") ". $row['f4'];
+                if ($row['f3'] !== 'LAB PK' and $row['f3'] !== 'RADIOLOGI'){
+                    $s[] = $row['f3'].$row['f4']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ";
+//                    $s[] = $row['f3']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ". $row['f4'];
+
+                }elseif ($row['f3'] !== 'RADIOLOGI' and $row['f3'] !== 'LAB PK'){
+                    $s[] = $row['f3'].$row['f4']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ";
+//                    $s[] = $row['f3']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ". $row['f4'];
                 }
             }
 //            return json_encode($s);
@@ -116,16 +159,20 @@ return [
 //            }
 //            return $s;
 //        }],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_meninggal', 'label'=>'Kejadian Meninggal'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_meninggal', 'label'=>'Kejadian Meninggal',
+        'value'=>function($data){
+    $tgl_meninggal = date('d-m-Y',strtotime($data->tgl_meninggal));
+    return $tgl_meninggal;
+        }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', 'label'=>'Status KLB'],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'Diagnosa Primer',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'Diagnosa Primer','format'=>"html",
         'value'=>function($data){
             $s=[];
             foreach ($data->diagnosa_px as $row){
                 if (!empty($row)){
                     if ($row['f3'] == '1'){
-                        $s[] = $row['f2'];
+                        $s[] =$row['f1'].", ". $row['f2']."<br>";
                     }
                 }else{
                     $s[]='null';
@@ -135,13 +182,13 @@ return [
             return implode($s,', ');
         }],
 
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_pxs','label'=>'Diagnosa Sekunder',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_pxs','label'=>'Diagnosa Sekunder','format' => 'html',
         'value'=>function($data){
             $s=[];
             foreach ($data->diagnosa_px as $row){
                 if (!empty($row)){
                     if ($row['f3'] == '2'){
-                        $s[] = $row['f2'];
+                        $s[] = $row['f1'].", ".$row['f2']."<br>";
                     }
                 }else{
                     $s[]='null';
@@ -151,45 +198,54 @@ return [
             return implode($s,', ');
         }],
 
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium','format' => 'html',
         'value'=>function($data){
-            $s=[];
+            $s=$tarif=[];
             foreach($data->hasil_penunjang as $row){
-                foreach ($data->billing_inacbg as $biaya){
-                    if ($biaya['f2'] == 'laboratorium'){
-                        $tarif= $biaya['f3'];
+                foreach ($data->tagihan_pelayanan as $biaya){
+                    if ($biaya['f3'] == $row['f3']){
+                        $tarif = $biaya['f4'];
                         if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
-                            $s[] =$data->visit_date."#". $row['f3']."# ".$row['f4'];
-//                    $s[] =$data->visit_date.", ". json_encode($data->tagihan_pelayanan);
-
+                            $s[] = $row['f3']." ".$tarif.", ".$row['f4']." (".date('d-m-Y',strtotime($data->visit_date)).") <br>";
+//
+//
                         }
                     }
                 }
 
             }
-//            return json_encode($s);
             return implode($s,', ');
         }],
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'hasil radiologi',
         'value'=>function($data){
             $s=[];
             foreach($data->hasil_penunjang as $row){
-                if($row['f2'] == "RADIOLOGI"){
-                    $s[] = $data->visit_date.", ".$row['f3'].", ".$row['f4'];
+                foreach ($data->tagihan_pelayanan as $biaya) {
+                    if ($biaya['f3'] == $row['f3']) {
+                        $tarif = $biaya['f4'];
+                        if ($row['f2'] == "RADIOLOGI") {
+                            $s[] = $row['f3'] . ', '.$tarif.", ". date('d-m-Y', strtotime($data->visit_date)).', '. $row['f4'];
+//                    $s[] = date('d-m-Y',strtotime($data->visit_date)).", ".$row['f3'].", ".$row['f4'];
 //                    $nm[] = $row['f3'];//biaya
+                        }
+                    }
                 }
             }
             return implode($s);
         }],
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'terapi',
         'value'=>function($data){
-//            $s = [];
-//            foreach ($data->list_obat as $row){
-//                $s[] = $row['f1'].$row['f3'];
-//            }
-//            return json_encode($s);
+            $s = [];
+            foreach ($data->list_obat as $row){
+                if (empty($row['f1'])){
+                    $s = 'null';
+                }else{
+                    $s[] = $row['f1'].$row['f3'].$row['f4'];
+                }
+            }
+            return json_encode($s);
 
-            return json_encode($data->list_obat);
+//            return json_encode($data->list_obat);
         },
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pemulasaraan_jenazah',
@@ -282,7 +338,7 @@ return [
                $tarifRS += $row['f3'];
 
             }
-            return json_encode($tarifRS);
+            return json_encode('Rp. '.$tarifRS);
         }],
 
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'status_grouper', 'label'=>'status'],
