@@ -47,23 +47,9 @@ return [
 //            ]
 //        ]
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS'],
-//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS',
-//        'filterType' => \kartik\grid\GridView::FILTER_SELECT2,
-//        'filter' => ['sudah krs'=>'Sudah KRS','belum krs'=>'Belum KRS'],
-//        'filterWidgetOptions' => [
-//            'pluginOptions' => ['allowClear' => true],]
-//    ],
-//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'surety_name', 'label'=>'jenis pinjaman'],
-//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'jns_layanan', 'label'=>'pelayanan'],
-//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan', 'label'=>'unit',
-//        'value'=>function($data){
-//            foreach ($data->unit_layanan as $row){
-//                $s[] = $row['f2'];
-//            }
-//            return json_encode($s);
-//        }
-//    ],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS',
+        'headerOptions' => ['width' => '150'],
+        ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'Nama Pasien'],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', 'label'=>'visit'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate',
@@ -75,7 +61,7 @@ return [
             $tgl_lahir = date('d-m-Y',strtotime($data->px_birthdate));
             return $tgl_lahir.'('.$usia.')';
         }, 'label'=>'Tanggal Lahir (usia)'],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'No Rekam Medis'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_norm', 'label'=>'No Rekam Medis',],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_noktp', 'label'=>'No NIK'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'pxsurety_no', 'label'=>'No Kartu BPJS'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'sep_no', 'label'=>'no SEP'],
@@ -245,16 +231,8 @@ return [
         'value'=>function($data){
             $s=$tarif=[];
             foreach($data->hasil_penunjang as $row){
-//                foreach ($data->tagihan_pelayanan as $biaya){
-//                    if ($biaya['f3'] == $row['f3']){
-//                        $tarif = $biaya['f4'];
-                        $tarif = 0;
                         if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
                             $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
-//
-//
-//                        }
-//                    }
                 }
 
             }
@@ -264,17 +242,11 @@ return [
         'value'=>function($data){
             $s=[];
             foreach($data->hasil_penunjang as $row){
-//                foreach ($data->tagihan_pelayanan as $biaya) {
-//                    if ($biaya['f3'] == $row['f3']) {
-//                        $tarif = $biaya['f4'];
                         if ($row['f2'] == "RADIOLOGI") {
 //                            $s[] = $row['f3'] . ', '.$tarif.", ". date('d-m-Y', strtotime($row['f5'])).', '. $row['f4'];
                             $s[] = $row['f3'] . ', '.$row['f6'].", ". date_format(date_create($row['f5']),'d-m-Y' ).', '. $row['f4'];
-//                    $s[] = date('d-m-Y',strtotime($data->visit_date)).", ".$row['f3'].", ".$row['f4'];
-//                    $nm[] = $row['f3'];//biaya
+
                         }
-//                    }
-//                }
             }
             return implode($s);
         }],
