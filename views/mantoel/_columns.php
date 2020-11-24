@@ -118,6 +118,35 @@ return [
 //            return json_encode($s);
             return implode($s,', ');
         },
+        'label'=>'Kelas Perawatan',
+    ],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hak_pelayanan',
+        'value'=>function($data){
+            $s=[];
+            foreach ($data->kelas_pelayanan as $row){
+                if($row['f2'] > $data->surety_class_id and $row['f1'] == "RI"){
+
+                    if($row['f3'] == 'NON KELAS'){
+                        $s[] = 'KELAS 3';
+                    }elseif ($row['f3'] == 'KELAS 3'){
+                        $s[] = 'KELAS 2';
+                    }elseif ($row['f3'] == 'KELAS 2'){
+                        $s[] = 'KELAS 1';
+                    }elseif ($row['f3'] == 'KELAS 1'){
+                        $s[] = 'KELAS VIP';
+                    }elseif ($row['f3'] == 'ELAS VIP'){
+                        $s[] = 'KELAS VVIP';
+                    }else{
+                        $s = '';
+                    }
+                }
+                elseif ($row['f2'] = $data->surety_class_id and $row['f1'] == "RI"){
+                    $s[] = $row['f3'];
+                }
+            }
+//            return json_encode($s);
+            return implode($s,', ');
+        },
         'label'=>'Hak Kelas',
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'ruang_rawat_px',
@@ -126,11 +155,9 @@ return [
 
                 if ($row['f3'] !== 'LAB PK' and $row['f3'] !== 'RADIOLOGI'){
                     $s[] = $row['f3'].$row['f4']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ";
-//                    $s[] = $row['f3']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ". $row['f4'];
 
                 }elseif ($row['f3'] !== 'RADIOLOGI' and $row['f3'] !== 'LAB PK'){
                     $s[] = $row['f3'].$row['f4']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ";
-//                    $s[] = $row['f3']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ". $row['f4'];
                 }
             }
 //            return json_encode($s);
@@ -178,7 +205,7 @@ return [
                     $s[]='null';
                 }
             }
-//            return json_encode($s);
+//            return json_encode($data->diagnosa_px);
             return implode($s,', ');
         }],
 
@@ -198,19 +225,36 @@ return [
             return implode($s,', ');
         }],
 
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium','format' => 'html',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'kondisi lain','format'=>"html",
+        'value'=>function($data){
+            $s=[];
+            foreach ($data->diagnosa_px as $row){
+                if (!empty($row)){
+                    if ($row['f3'] == '4'){
+                        $s[] =$row['f1'].", ". $row['f2']."<br>";
+                    }
+                }else{
+                    $s[]='null';
+                }
+            }
+//            return json_encode($s);
+            return implode($s,', ');
+        }],
+
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium','format' => 'html',//tanggal older
         'value'=>function($data){
             $s=$tarif=[];
             foreach($data->hasil_penunjang as $row){
-                foreach ($data->tagihan_pelayanan as $biaya){
-                    if ($biaya['f3'] == $row['f3']){
-                        $tarif = $biaya['f4'];
+//                foreach ($data->tagihan_pelayanan as $biaya){
+//                    if ($biaya['f3'] == $row['f3']){
+//                        $tarif = $biaya['f4'];
+                        $tarif = 0;
                         if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
-                            $s[] = $row['f3']." ".$tarif.", ".$row['f4']." (".date('d-m-Y',strtotime($data->visit_date)).") <br>";
+                            $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
 //
 //
-                        }
-                    }
+//                        }
+//                    }
                 }
 
             }
@@ -220,16 +264,17 @@ return [
         'value'=>function($data){
             $s=[];
             foreach($data->hasil_penunjang as $row){
-                foreach ($data->tagihan_pelayanan as $biaya) {
-                    if ($biaya['f3'] == $row['f3']) {
-                        $tarif = $biaya['f4'];
+//                foreach ($data->tagihan_pelayanan as $biaya) {
+//                    if ($biaya['f3'] == $row['f3']) {
+//                        $tarif = $biaya['f4'];
                         if ($row['f2'] == "RADIOLOGI") {
-                            $s[] = $row['f3'] . ', '.$tarif.", ". date('d-m-Y', strtotime($data->visit_date)).', '. $row['f4'];
+//                            $s[] = $row['f3'] . ', '.$tarif.", ". date('d-m-Y', strtotime($row['f5'])).', '. $row['f4'];
+                            $s[] = $row['f3'] . ', '.$row['f6'].", ". date_format(date_create($row['f5']),'d-m-Y' ).', '. $row['f4'];
 //                    $s[] = date('d-m-Y',strtotime($data->visit_date)).", ".$row['f3'].", ".$row['f4'];
 //                    $nm[] = $row['f3'];//biaya
                         }
-                    }
-                }
+//                    }
+//                }
             }
             return implode($s);
         }],

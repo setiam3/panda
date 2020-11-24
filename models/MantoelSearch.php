@@ -9,14 +9,14 @@ class MantoelSearch extends PiringMangkok
 {
     public $createTimeStart,$createTimeEnd,$tgl_pulang;
     public $diagnosa_pxs,$retribusi,$hasil_laborat,$hasil_radoilogi,$terapi,$pemulasaraan_jenazah,$kantong_jenazah,
-        $peti_jenazah,$plastik_jenazah,$desinfektan_jenazah,$transport_mobil,$desinfektan_mobil;
+        $peti_jenazah,$plastik_jenazah,$desinfektan_jenazah,$transport_mobil,$desinfektan_mobil,$hak_pelayanan;
     public function rules()
     {
         return [
             [['visit_id', 'visit_date', 'px_id', 'px_norm', 'px_noktp', 'px_name', 'px_sex', 'px_address', 'surety_id',
             'surety_name', 'visit_status', 'sep_no', 'pxsurety_no',
             'visit_end_date',
-            'ruang_rawat_px', 'jns_layanan', 'class_id', 'visit_end_cause_id', 'kelas_pelayanan',
+            'ruang_rawat_px', 'jns_layanan', 'surety_class_id', 'visit_end_cause_id', 'kelas_pelayanan',
             'diagnosa_px',
             'diagnosa_pxs',
             'tindakan_px',
@@ -48,7 +48,8 @@ class MantoelSearch extends PiringMangkok
             'desinfektan_jenazah',
             'transport_mobil',
             'desinfektan_mobil',
-            'terapi'
+            'terapi',
+            'hak_pelayanan'
             ],'safe'],
         ];
     }
@@ -82,7 +83,7 @@ class MantoelSearch extends PiringMangkok
         $query->andFilterWhere([
             'visit_id'=>$this->visit_id,
             'px_id'=>$this->px_id,
-            'class_id'=>$this->class_id,
+            'surety_class_id'=>$this->surety_class_id,
             'klb_id'=>$this->klb_id,
             'px_norm'=>$this->px_norm,
             'surety_id'=>$this->surety_id,
@@ -91,7 +92,7 @@ class MantoelSearch extends PiringMangkok
             'visit_id_klaim'=>$this->visit_id_klaim,
             'transfer_id'=>$this->transfer_id,
             'klb_id'=>$this->klb_id,
-            'class_id'=>$this->class_id,
+//            'class_id'=>$this->class_id,
             'visit_end_cause_id'=>$this->visit_end_cause_id,
             ]);
         $dates = explode(' - ', $this->visit_date);
@@ -122,13 +123,13 @@ class MantoelSearch extends PiringMangkok
         $tglmeninggal = new Expression('TO_CHAR (tgl_meninggal::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_meninggal.'%\'');
         $tgl_pulang = new Expression('TO_CHAR (visit_end_date::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_pulang.'%\'');
         $query
-//            ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
+            ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
             ->andWhere($visit_date)
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
             ->andFilterWhere(['like', 'lower(px_name)', strtolower($this->px_name)])
             ->andFilterWhere(['like', 'lower(px_sex)', strtolower($this->px_sex)])
             ->andFilterWhere(['like', 'lower(px_address)', strtolower($this->px_address)])
-            ->andFilterWhere(['like', 'lower(surety_name)', strtolower($this->surety_name)])
+            ->andFilterWhere(['=', 'lower(surety_name)', strtolower($this->surety_name)])
             ->andFilterWhere(['like', 'sep_no', $this->sep_no])
             ->andFilterWhere(['like', 'pxsurety_no', $this->pxsurety_no])
 //            ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
@@ -138,7 +139,7 @@ class MantoelSearch extends PiringMangkok
             ->andWhere($tglmeninggal)
 //            ->andFilterWhere(['like', 'text(ruang_rawat_px)', $this->ruang_rawat_px])
             ->andWhere($ruang_rawat)
-            ->andFilterWhere(['like', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
+            ->andFilterWhere(['=', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
 //            ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
             ->andWhere($kelas_pelayanan)
             ->andWhere($diagnosa)//diagnosa primer
