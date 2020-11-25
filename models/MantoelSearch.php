@@ -49,7 +49,7 @@ class MantoelSearch extends PiringMangkok
             'transport_mobil',
             'desinfektan_mobil',
             'terapi',
-            'hak_pelayanan'
+            'hak_kelas_px'
             ],'safe'],
         ];
     }
@@ -61,7 +61,6 @@ class MantoelSearch extends PiringMangkok
     public function search($params)
     {
         $query = PiringMangkok::find();
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' =>false

@@ -106,32 +106,33 @@ return [
         },
         'label'=>'Kelas Perawatan',
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hak_pelayanan',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hak_kelas_px',
         'value'=>function($data){
-            $s=[];
-            foreach ($data->kelas_pelayanan as $row){
-                if($row['f2'] > $data->surety_class_id and $row['f1'] == "RI"){
-
-                    if($row['f3'] == 'NON KELAS'){
-                        $s[] = 'KELAS 3';
-                    }elseif ($row['f3'] == 'KELAS 3'){
-                        $s[] = 'KELAS 2';
-                    }elseif ($row['f3'] == 'KELAS 2'){
-                        $s[] = 'KELAS 1';
-                    }elseif ($row['f3'] == 'KELAS 1'){
-                        $s[] = 'KELAS VIP';
-                    }elseif ($row['f3'] == 'ELAS VIP'){
-                        $s[] = 'KELAS VVIP';
-                    }else{
-                        $s = '';
-                    }
-                }
-                elseif ($row['f2'] = $data->surety_class_id and $row['f1'] == "RI"){
-                    $s[] = $row['f3'];
-                }
-            }
-//            return json_encode($s);
-            return implode($s,', ');
+        return $data->hak_kelas_px;
+//            $s=[];
+//            foreach ($data->kelas_pelayanan as $row){
+//                if($row['f2'] > $data->surety_class_id and $row['f1'] == "RI"){
+//
+//                    if($row['f3'] == 'NON KELAS'){
+//                        $s[] = 'KELAS 3';
+//                    }elseif ($row['f3'] == 'KELAS 3'){
+//                        $s[] = 'KELAS 2';
+//                    }elseif ($row['f3'] == 'KELAS 2'){
+//                        $s[] = 'KELAS 1';
+//                    }elseif ($row['f3'] == 'KELAS 1'){
+//                        $s[] = 'KELAS VIP';
+//                    }elseif ($row['f3'] == 'ELAS VIP'){
+//                        $s[] = 'KELAS VVIP';
+//                    }else{
+//                        $s = '';
+//                    }
+//                }
+//                elseif ($row['f2'] = $data->surety_class_id and $row['f1'] == "RI"){
+//                    $s[] = $row['f3'];
+//                }
+//            }
+////            return json_encode($s);
+//            return implode($s,', ');
         },
         'label'=>'Hak Kelas',
     ],
