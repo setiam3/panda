@@ -106,33 +106,25 @@ return [
         },
         'label'=>'Kelas Perawatan',
     ],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'hak_kelas_px',
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'class_id',
         'value'=>function($data){
-        return $data->hak_kelas_px;
-//            $s=[];
-//            foreach ($data->kelas_pelayanan as $row){
-//                if($row['f2'] > $data->surety_class_id and $row['f1'] == "RI"){
-//
-//                    if($row['f3'] == 'NON KELAS'){
-//                        $s[] = 'KELAS 3';
-//                    }elseif ($row['f3'] == 'KELAS 3'){
-//                        $s[] = 'KELAS 2';
-//                    }elseif ($row['f3'] == 'KELAS 2'){
-//                        $s[] = 'KELAS 1';
-//                    }elseif ($row['f3'] == 'KELAS 1'){
-//                        $s[] = 'KELAS VIP';
-//                    }elseif ($row['f3'] == 'ELAS VIP'){
-//                        $s[] = 'KELAS VVIP';
-//                    }else{
-//                        $s = '';
-//                    }
-//                }
-//                elseif ($row['f2'] = $data->surety_class_id and $row['f1'] == "RI"){
-//                    $s[] = $row['f3'];
-//                }
-//            }
-////            return json_encode($s);
-//            return implode($s,', ');
+            if ($data->class_id == 1){
+                $s = 'NON KELAS';
+            }elseif ($data->class_id == 2){
+                $s = 'KELAS 1';
+            }elseif ($data->class_id == 3){
+                $s = 'KELAS 2';
+            }elseif ($data->class_id == 4){
+                $s = 'KELAS 3';
+            }elseif ($data->class_id == 5){
+                $s = 'KELAS VIP';
+            }
+            elseif ($data->class_id == 6){
+                $s = 'KELAS VVIP';
+            }else{
+                $s = '';
+            }
+            return $s;
         },
         'label'=>'Hak Kelas',
     ],
@@ -154,25 +146,6 @@ return [
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_doctor_name', 'label'=>'DPJP'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'cara_pulang', 'label'=>'Cara Pulang'],
-//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_cause_id', 'label'=>'Cara Pulang',
-//        'value'=>function($data){
-//            if ($data->visit_end_cause_id == "52"){
-//                $s = "Meninggal";
-//            }elseif ($data->visit_end_cause_id == "54"){
-//                $s = "Atas Permintaan Sendiri";
-//            }elseif ($data->visit_end_cause_id == "50"){
-//                $s = "Dirujuk";
-//            }elseif ($data->visit_end_cause_id == "57"){
-//                $s = "Melarikan Diri";
-//            }elseif ($data->visit_end_cause_id == "55"){
-//                $s = "(-)";
-//            }elseif ($data->visit_end_cause_id == "48"){
-//                $s = "Atas Persetujuan Dokter";
-//            }else{
-//                $s = "null";
-//            }
-//            return $s;
-//        }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_meninggal', 'label'=>'Kejadian Meninggal',
         'value'=>function($data){
     $tgl_meninggal = date('d-m-Y',strtotime($data->tgl_meninggal));

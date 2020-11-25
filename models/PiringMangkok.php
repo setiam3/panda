@@ -20,8 +20,8 @@ class PiringMangkok extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['visit_id', 'px_id', 'surety_id', 'visit_status', 'surety_class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'default', 'value' => null],
-            [['visit_id', 'px_id', 'surety_id', 'visit_status', 'surety_class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'integer'],
+            [['visit_id', 'px_id', 'surety_id', 'visit_status', 'class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'default', 'value' => null],
+            [['visit_id', 'px_id', 'surety_id', 'visit_status', 'class_id', 'visit_end_cause_id', 'klb_id', 'transfer_id', 'visit_id_klaim'], 'integer'],
             [['visit_date', 'visit_end_date', 'kelas_pelayanan', 'billing_inacbg', 'unit_layanan','sep_tgl','tgl_meninggal','list_obat','tagihan_pelayanan'], 'safe'],
             [['px_address', 'ruang_rawat_px', 'jns_layanan', 'diagnosa_px', 'tindakan_px', 'visit_end_doctor_name','krs','cara_pulang','hak_kelas_px'], 'string'],
             [['px_norm'], 'string', 'max' => 10],
@@ -54,7 +54,7 @@ class PiringMangkok extends \yii\db\ActiveRecord
             'visit_end_date' => 'Visit End Date',
             'ruang_rawat_px' => 'Ruang Rawat Px',
             'jns_layanan' => 'Jns Layanan',
-            'surety_class_id' => 'Class ID',
+            'class_id' => 'Class ID',
             'visit_end_cause_id' => 'Visit End Cause ID',
             'kelas_pelayanan' => 'Kelas Pelayanan',
             'diagnosa_px' => 'Diagnosa Px',
