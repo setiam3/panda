@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use app\models\MantoelSearch;
 use app\models\PandaSearch;
 use Yii;
 use app\models\Panda;
@@ -11,7 +12,7 @@ class PandaController extends \yii\web\Controller
     public function coba($visid){
         $sql = "SELECT ruang_rawat_px from yanmed.v_panda where visit_id ='$visid'";
         $datas = Yii::$app->db->createCommand($sql)->queryAll();
-$table='<table>';
+        $table='<table>';
         foreach ($datas as $data){
             $table.='<tr>';
             $lain_3=json_decode($data['ruang_rawat_px']);
@@ -42,7 +43,35 @@ $table='<table>';
         return $table;
 
     }
+
     public function actionIndex()
+    {
+        $model= new PandaSearch();
+        return $this->render('_form', [
+            'model' => $model,
+        ]);
+    }
+    public function actionPreview(){
+        $request = \Yii::$app->request;
+        if (empty($request)){
+            $param = \Yii::$app->request->queryParams;
+        }else{
+            $param=$request->queryParams;
+        }
+        $searchModel = new PandaSearch();
+        $dataProvider = $searchModel->search($param);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+
+    }
+
+
+
+
+
+    public function actionIndex1()
     {
         $where='';
         $searchModel = new PandaSearch();

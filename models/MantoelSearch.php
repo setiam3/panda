@@ -66,16 +66,7 @@ class MantoelSearch extends PiringMangkok
             'sort' =>false
         ]);
 
-//        $dataProvider->setSort([
-//            'attributes' => [
-//                'retribusi' => [
-//                    'asc' => ['tagihan_pelayanan' => SORT_ASC],
-//                    'desc' => ['tagihan_pelayanan' => SORT_DESC],
-//                    'label' => 'Your_label',
-//                    'default' => SORT_ASC
-//                ],'defaultOrder' => [ 'retribusi' => SORT_DESC ],],]);
-
-                $this->load($params);
+        $this->load($params);
         if (!$this->validate()) {
             return $dataProvider;
         }
@@ -99,7 +90,6 @@ class MantoelSearch extends PiringMangkok
             $this->createTimeStart = $dates[0];
             $this->createTimeEnd = $dates[1];
         }
-//        $unit = new Expression('lower(unit_layanan::text) like \'%'.strtolower($this->unit_layanan).'%\'');
         $unit = new Expression('unit_layanan::text similar to \'%('.implode($this->unit_layanan,'|').')%\'');
         $kelas_pelayanan = new Expression('lower(kelas_pelayanan::text) like \'%'.strtolower($this->kelas_pelayanan).'%\'');
         $ruang_rawat = new Expression('lower(ruang_rawat_px::text) like \'%'.strtolower($this->ruang_rawat_px).'%\'');

@@ -3,38 +3,26 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 
-class PandaSearch extends Panda
+class PandaSearch extends PiringMangkok
 {
     public $createTimeStart,$createTimeEnd;
-    public $KRS;
+    public $krs,$tempat_layanan;
+    public $diagnosa_pxs,$retribusi,$hasil_laborat,$hasil_radoilogi,$terapi,$pemulasaraan_jenazah,$kantong_jenazah,
+        $peti_jenazah,$plastik_jenazah,$desinfektan_jenazah,$transport_mobil,$desinfektan_mobil,$hak_pelayanan;
     public function rules()
     {
         return [
-            [['visit_id',
-                'visit_date',
-                'px_id',
-                'px_norm',
-                'px_noktp',
-                'px_name',
-                'px_sex',
-                'px_address',
-                'px_birthdate',
-                'surety_id',
-                'surety_name',
-                'visit_status',
-                'sep_no',
-                'sep_tgl',
-                'pxsurety_no',
+            [['visit_id', 'visit_date', 'px_id', 'px_norm', 'px_noktp', 'px_name', 'px_sex', 'px_address', 'surety_id',
+                'surety_name', 'visit_status', 'sep_no', 'pxsurety_no',
                 'visit_end_date',
-                'ruang_rawat_px',
-                'jns_layanan',
-                'class_id',
-                'visit_end_cause_id',
-                'kelas_pelayanan',
+                'ruang_rawat_px', 'jns_layanan', 'class_id', 'visit_end_cause_id', 'kelas_pelayanan',
                 'diagnosa_px',
+                'diagnosa_pxs',
                 'tindakan_px',
-                'billing_inacbg',
+                'px_birthdate',
+//            'billing_inacbg',
                 'visit_end_doctor_name',
                 'klb_id',
                 'klb_name',
@@ -43,9 +31,25 @@ class PandaSearch extends Panda
                 'grouper_code',
                 'visit_id_klaim',
                 'unit_layanan',
-                'hasil_penunjang',
-                'list_obat',
+                'sep_tgl',
+                'tgl_meninggal',
+                'tgl_pulang',
                 'krs',
+                'tagihan_pelayanan',
+                'cara_pulang',
+                'hasil_laborat',
+                'retribusi',
+                'hasil_penunjang',
+                'hasil_radoilogi',
+                'pemulasaraan_jenazah',
+                'kantong_jenazah',
+                'peti_jenazah',
+                'plastik_jenazah',
+                'desinfektan_jenazah',
+                'transport_mobil',
+                'desinfektan_mobil',
+                'list_obat',
+                'tempat_layanan',
             ],'safe'],
         ];
     }
@@ -53,12 +57,13 @@ class PandaSearch extends Panda
     {
         return Model::scenarios();
     }
-    public function search($params, $where = null)
+    public function search($params)
     {
-        $query = Panda::find()->where($where);
+        $query = PiringMangkok::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>false
         ]);
         $this->load($params);
         if (!$this->validate()) {
@@ -78,6 +83,7 @@ class PandaSearch extends Panda
             'klb_id'=>$this->klb_id,
             'visit_end_cause_id'=>$this->visit_end_cause_id,
         ]);
+
         $dates = explode(' - ', $this->visit_date);
         if((bool) strtotime($dates[0]) && (bool) strtotime ($dates[1])) {
             $this->createTimeStart = $dates[0];
@@ -85,11 +91,29 @@ class PandaSearch extends Panda
         }
 
 
+
+        $unit = new Expression('unit_layanan::text similar to \'%('.implode($this->unit_layanan,'|').')%\'');
+
+        $birthdate = new Expression('TO_CHAR (px_birthdate::date,\'dd-mm-yyyy\') LIKE \'%'.$this->px_birthdate.'%\'');
+        $tempatL = new Expression('unit_layanan::text like \'%'.$this->tempat_layanan.'%\'');
+        $diagnosa = new Expression('lower(diagnosa_px::text) like \'%'.strtolower($this->diagnosa_px).'%\'');
+        $diagnosaS = new Expression('lower(diagnosa_px::text) like \'%'.strtolower($this->diagnosa_pxs).'%\'');
+        $hasil_laborat = new Expression('lower(hasil_penunjang::text) like \'%'.strtolower($this->hasil_laborat).'%\'');
+        $hasil_radoilogi = new Expression('lower(hasil_penunjang::text) like \'%'.strtolower($this->hasil_radoilogi).'%\'');
+
+        $pemulasaraan = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->pemulasaraan_jenazah).'%\'');
+        $kantong_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->kantong_jenazah).'%\'');
+        $peti_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->peti_jenazah).'%\'');
+        $plastik_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->plastik_jenazah).'%\'');
+        $desinfektan_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_jenazah).'%\'');
+        $transport_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->transport_mobil).'%\'');
+        $desinfektan_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_mobil).'%\'');
         $query
             ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
 //            ->andFilterWhere(['like', 'visit_date', $this->visit_date])
             ->andFilterWhere(['like', 'px_norm', $this->px_norm])
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
+            ->andWhere($birthdate)
             ->andFilterWhere(['like', 'px_name', $this->px_name])
             ->andFilterWhere(['like', 'px_sex', $this->px_sex])
             ->andFilterWhere(['like', 'px_address', $this->px_address])
@@ -99,10 +123,11 @@ class PandaSearch extends Panda
 //            ->andFilterWhere(['like', 'visit_end_date', $this->visit_end_date])
             ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
             ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px])
-//            ->andFilterWhere(['like', 'KRS', $this->KRS])
+            ->andFilterWhere(['like', 'krs', $this->krs])
             ->andFilterWhere(['like', 'jns_layanan', $this->jns_layanan])
             ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
-            ->andFilterWhere(['like', 'diagnosa_px', $this->diagnosa_px])
+            ->andWhere($diagnosa)
+            ->andWhere($diagnosaS)
             ->andFilterWhere(['like', 'tindakan_px', $this->tindakan_px])
             ->andFilterWhere(['like', 'tagihan_pelayanan', $this->tagihan_pelayanan])
             ->andFilterWhere(['like', 'visit_end_doctor_name', $this->visit_end_doctor_name])
@@ -110,9 +135,19 @@ class PandaSearch extends Panda
             ->andFilterWhere(['like', 'klb_name', $this->klb_name])
             ->andFilterWhere(['like', 'status_grouper', $this->status_grouper])
             ->andFilterWhere(['like', 'grouper_code', $this->grouper_code])
-            ->andFilterWhere(['like', 'unit_layanan', $this->unit_layanan])
-            ->andFilterWhere(['like', 'hasil_penunjang', $this->hasil_penunjang])
-            ->andFilterWhere(['like', 'list_obat', $this->list_obat]);
+            ->andWhere($tempatL)
+            ->andWhere($unit)
+            ->andWhere($hasil_laborat)
+            ->andWhere($hasil_radoilogi)
+            ->andFilterWhere(['like', 'list_obat', $this->list_obat])
+            ->andFilterWhere(['like', 'cara_pulang', $this->cara_pulang])
+            ->andWhere($pemulasaraan)
+            ->andWhere($peti_jenazah)
+            ->andWhere($plastik_jenazah)
+            ->andWhere($desinfektan_jenazah)
+            ->andWhere($transport_mobil)
+            ->andWhere($desinfektan_mobil)
+            ->andWhere($kantong_jenazah);
         return $dataProvider;
     }
 }
