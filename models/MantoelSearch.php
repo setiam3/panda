@@ -39,6 +39,7 @@ class MantoelSearch extends PiringMangkok
             'hasil_laborat',
             'retribusi',
             'hasil_laborat',
+//            'hasil_penunjang2',
             'hasil_penunjang',
             'hasil_radoilogi',
             'pemulasaraan_jenazah',
@@ -90,7 +91,19 @@ class MantoelSearch extends PiringMangkok
             $this->createTimeStart = $dates[0];
             $this->createTimeEnd = $dates[1];
         }
-        $unit = new Expression('unit_layanan::text similar to \'%('.implode($this->unit_layanan,'|').')%\'');
+        if (empty($this->unit_layanan)){
+            $unit = new Expression('unit_layanan::text similar to \'%%\'');
+        }else{
+            $unit = new Expression('unit_layanan::text similar to \'%('.implode($this->unit_layanan,'|').')%\'');
+
+        }
+        if (empty($this->jns_layanan)){
+            $jns_layanan = '';
+        }else{
+            $jns_layanan = strtolower(implode($this->jns_layanan,','));
+
+        }
+
         $kelas_pelayanan = new Expression('lower(kelas_pelayanan::text) like \'%'.strtolower($this->kelas_pelayanan).'%\'');
         $ruang_rawat = new Expression('lower(ruang_rawat_px::text) like \'%'.strtolower($this->ruang_rawat_px).'%\'');
         $diagnosa = new Expression('lower(diagnosa_px::text) like \'%'.strtolower($this->diagnosa_px).'%\'');
@@ -128,7 +141,8 @@ class MantoelSearch extends PiringMangkok
             ->andWhere($tglmeninggal)
 //            ->andFilterWhere(['like', 'text(ruang_rawat_px)', $this->ruang_rawat_px])
             ->andWhere($ruang_rawat)
-            ->andFilterWhere(['=', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
+//            ->andFilterWhere(['=', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
+            ->andFilterWhere(['=', 'lower(jns_layanan)', $jns_layanan])
 //            ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
             ->andWhere($kelas_pelayanan)
             ->andWhere($diagnosa)//diagnosa primer

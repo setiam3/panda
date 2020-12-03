@@ -25,29 +25,29 @@
         <td style="font-weight: 900;" class="field_judul">2.</td>
         <td style="font-weight: 900;" class="field_judul">Nomor Rekam Medik</td>
         <td>:</td>
-        <td ><?=$model[0]['px_norm']?></td>
+        <td ><?=$data->px_norm?></td>
         <td style="font-weight: 900;" class="field_judul">NIK</td>
         <td>:</td>
-        <td ><?=$model[0]['px_noktp']?></td>
+        <td ><?=$data->px_noktp?></td>
     </tr>
     <tr>
         <td style="font-weight: 900;" class="field_judul">3.</td>
         <td style="font-weight: 900;" class="field_judul">Nama Pasien</td>
         <td>:</td>
-        <td colspan="4"><?=strtoupper($model[0]['px_name'])?></td>
+        <td colspan="4"><?=strtoupper($data->px_name)?></td>
     </tr>
 
     <tr>
         <td style="font-weight: 900;" class="field_judul">4.</td>
         <!-- <td class="field_judul">Tanggal Masuk</td>
 		<td>:</td>
-		<td><?php if($model[0]['visit_date']) echo date('d-m-Y',strtotime($model[0]['visit_date']))?></td> -->
+		<td><?php if($data->visit_date) echo date('d-m-Y',strtotime($data->visit_date))?></td> -->
         <td style="font-weight: 900;" class="field_judul">Tanggal Keluar</td>
         <td>:</td>
-        <td><?php if($model[0]['visit_end_date']) {
-                echo date('d-m-Y',strtotime($model[0]['visit_end_date']));
-            }elseif (empty($model[0]['visit_end_date']) and $model[0]['srv_type'] == 'RJ') {
-                echo date('d-m-Y',strtotime($model[0]['visit_date']));
+        <td><?php if($data->visit_end_date) {
+                echo date('d-m-Y',strtotime($data->visit_end_date));
+            }elseif (empty($data->visit_end_date) and $data->srv_type == 'RJ') {
+                echo date('d-m-Y',strtotime($$data->visit_date));
             }?></td>
     </tr>
 
@@ -55,7 +55,7 @@
 <br>
 <table width="630px" style="font-size: 12px; border-collapse: collapse;" border="1">
     <?php
-    echo $data['all1'];echo $data['all2'];
+    echo $datas['all1'];echo $datas['all2'];
     ?>
 </table>
 

@@ -1,32 +1,9 @@
-<?php
-$this->registerCss("
-.field_judul {
-        font-weight: 900;
-    }
-    .tabel{
-        border-collapse:collapse;
-        width:100%;}
-    .tabel th{
-        color:#000;
-        border:#000000 solid 1px;
-        padding:3px;
-        font-size: 14px;
-    }
-    .tabel td{
-        border:#000000 solid 1px;
-        padding:3px;
-        font-size: 12px;
-    }
-");
-?>
-
 <table class="satu" border="0" width="100%">
     <tr>
         <td>
             <table border="0">
                 <tr>
                     <td></td>
-<!--                    <td><img src="--><?php //echo site_url('assets/global/img/logo_rs.png'); ?><!--" width="7%"/></td>-->
                     <td><b>RSUD IBNU SINA KABUPATEN GRESIK</b><br>
                         <h5 style="font-size:10px;">JL. DR. WAHIDIN SH NO.243 B GRESIK - 0313951239<br>GRESIK</h5></td>
                 </tr>
@@ -47,29 +24,29 @@ $this->registerCss("
         <td style = "font-weight: 900;" class="field_judul">2.</td>
         <td style = "font-weight: 900;" class="field_judul">Nomor Rekam Medik</td>
         <td>:</td>
-        <td ><?=$model[0]['px_norm']?></td>
+        <td ><?=$data->px_norm?></td>
         <td style = "font-weight: 900;" class="field_judul">NIK</td>
         <td>:</td>
-        <td ><?=$model[0]['px_noktp']?></td>
+        <td ><?=$data->px_noktp?></td>
     </tr>
     <tr>
         <td style = "font-weight: 900;" class="field_judul">3.</td>
         <td style = "font-weight: 900;" class="field_judul">Nama Pasien</td>
         <td>:</td>
-        <td colspan="4"><?=strtoupper($model[0]['px_name'])?></td>
+        <td colspan="4"><?=strtoupper($data->px_name)?></td>
     </tr>
 
     <tr>
         <td style = "font-weight: 900;" class="field_judul">4.</td>
         <!-- <td class="field_judul">Tanggal Masuk</td>
 		<td>:</td>
-		<td><?php if($model[0]['visit_date']) echo date('d-m-Y',strtotime($model[0]['visit_date']))?></td> -->
+		<td><?php if($data->visit_date) echo date('d-m-Y',strtotime($data->visit_date))?></td> -->
         <td style = "font-weight: 900;" class="field_judul">Tanggal Keluar</td>
         <td>:</td>
-        <td><?php if($model[0]['visit_end_date']) {
-                echo date('d-m-Y',strtotime($model[0]['visit_end_date']));
-            }elseif (empty($model[0]['visit_end_date']) and $model[0]['srv_type'] == 'RJ') {
-                echo date('d-m-Y',strtotime($model[0]['visit_date']));
+        <td><?php if($data->visit_end_date) {
+                echo date('d-m-Y',strtotime($data->visit_end_date));
+            }elseif (empty($data->visit_end_date) and $data->srv_type == 'RJ') {
+                echo date('d-m-Y',strtotime($data->visit_date));
             }?></td>
     </tr>
 

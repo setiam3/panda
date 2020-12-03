@@ -200,8 +200,16 @@ return [
         'value'=>function($data){
             $s=$tarif=[];
             foreach($data->hasil_penunjang as $row){
-                        if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
-                            $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
+                if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
+//                            if($row['f3']== 'Darah Lengkap'){
+//                                $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).")";
+////////                                if(stripos($row['f4'], '0101010101') !== false){
+////                                $s[] = $row['f5'];
+//////
+////                                }
+//////
+//                            }
+                    $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
                 }
 
             }

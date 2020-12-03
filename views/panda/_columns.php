@@ -36,10 +36,15 @@ return [
                 ],
             ],
         ]),
+        'value'=>function($data){
+            $visit_date = date('d-m-Y H:m:s',strtotime($data->visit_end_date)); return $visit_date;
+        },
         'label'=>'Tanggal Masuk'
     ],
 //    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'unit_layanan', 'label'=>'Cara Pulang','value'=>function($data){return json_encode($data->unit_layanan);}],
-    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_end_date', 'label'=>'Tanggal keluar'],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_pulang', 'label'=>'Tanggal keluar', 'value'=>function($data){
+        $visit_end_date = date('d-m-Y H:m:s',strtotime($data->visit_end_date));
+        return $visit_end_date;}],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs',],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'Pasien'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate',

@@ -8,7 +8,7 @@ use yii\db\Expression;
 class PandaSearch extends PiringMangkok
 {
     public $createTimeStart,$createTimeEnd;
-    public $krs,$tempat_layanan;
+    public $krs,$tempat_layanan, $tgl_pulang;
     public $diagnosa_pxs,$retribusi,$hasil_laborat,$hasil_radoilogi,$terapi,$pemulasaraan_jenazah,$kantong_jenazah,
         $peti_jenazah,$plastik_jenazah,$desinfektan_jenazah,$transport_mobil,$desinfektan_mobil,$hak_pelayanan;
     public function rules()
@@ -50,6 +50,7 @@ class PandaSearch extends PiringMangkok
                 'desinfektan_mobil',
                 'list_obat',
                 'tempat_layanan',
+                'tgl_pulang','terapi',
             ],'safe'],
         ];
     }
@@ -90,9 +91,13 @@ class PandaSearch extends PiringMangkok
             $this->createTimeEnd = $dates[1];
         }
 
+        if (empty($this->unit_layanan)){
+            $unit = new Expression('unit_layanan::text similar to \'%%\'');
+        }else{
+            $unit = new Expression('unit_layanan::text similar to \'%('.implode($this->unit_layanan,'|').')%\'');
+        }
 
-
-        $unit = new Expression('unit_layanan::text similar to \'%('.implode($this->unit_layanan,'|').')%\'');
+        $tgl_pulang = new Expression('TO_CHAR (visit_end_date::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_pulang.'%\'');
 
         $birthdate = new Expression('TO_CHAR (px_birthdate::date,\'dd-mm-yyyy\') LIKE \'%'.$this->px_birthdate.'%\'');
         $tempatL = new Expression('unit_layanan::text like \'%'.$this->tempat_layanan.'%\'');
@@ -100,6 +105,7 @@ class PandaSearch extends PiringMangkok
         $diagnosaS = new Expression('lower(diagnosa_px::text) like \'%'.strtolower($this->diagnosa_pxs).'%\'');
         $hasil_laborat = new Expression('lower(hasil_penunjang::text) like \'%'.strtolower($this->hasil_laborat).'%\'');
         $hasil_radoilogi = new Expression('lower(hasil_penunjang::text) like \'%'.strtolower($this->hasil_radoilogi).'%\'');
+        $terapi = new Expression('lower(list_obat::text) like \'%'.strtolower($this->terapi).'%\'');
 
         $pemulasaraan = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->pemulasaraan_jenazah).'%\'');
         $kantong_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->kantong_jenazah).'%\'');
@@ -114,6 +120,8 @@ class PandaSearch extends PiringMangkok
             ->andFilterWhere(['like', 'px_norm', $this->px_norm])
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
             ->andWhere($birthdate)
+            ->andWhere($tgl_pulang)
+            ->andWhere($terapi)
             ->andFilterWhere(['like', 'px_name', $this->px_name])
             ->andFilterWhere(['like', 'px_sex', $this->px_sex])
             ->andFilterWhere(['like', 'px_address', $this->px_address])
