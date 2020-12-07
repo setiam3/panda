@@ -23,7 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     <div class="col-md-6">
         <?= $form->field($model, 'surety_name')->widget(\kartik\select2\Select2::classname(),[
-            'data' => \yii\helpers\ArrayHelper::map(\app\models\MantoelSearch::find()->all(),'surety_name','surety_name'),
+            'data' => \yii\helpers\ArrayHelper::map(
+                    \app\models\MantoelSearch::find()->all(),'surety_name','surety_name'
+//                (new \yii\db\Query())
+//                    ->from('yanmed.ms_surety')
+////                ->where(['is_pm'=>'TRUE'])
+//                ->andWhere(['surety_active'=>'TRUE'])
+//                    ->orderBy('surety_name')->all(),'surety_name','surety_name'
+            ),
             'language' => 'de',
             'options' => ['placeholder' => 'Select a state ...'],
             'pluginOptions' => [

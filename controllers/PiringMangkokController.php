@@ -349,6 +349,7 @@ class PiringMangkokController extends \yii\web\Controller
 							"episodes":"'.$episodes.'"
 						}
 					}';
+//            var_dump($request);die();
 
             //conek server
              $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
@@ -375,10 +376,10 @@ class PiringMangkokController extends \yii\web\Controller
 
                  echo json_encode($metadata);
 
-                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
-                     $this->grouper_stage_1($nosep,$data);
-////                     $this->grouper_stage_1($nosep,$param);
-                 }
+//                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
+//                     $this->grouper_stage_1($nosep,$data);
+//////                     $this->grouper_stage_1($nosep,$param);
+//                 }
              }
              else{
                  $this->delete_all_file($nosep,$data);
@@ -416,8 +417,8 @@ class PiringMangkokController extends \yii\web\Controller
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 if($this->is_go_grouper != '0'){
                     $hasil = $act['response'];
+//                    var_dump($hasil);die();
                     $tarif = $act['tarif_alt'][$surety_class_id-1];
-//                    var_dump("dsada");
 
                     if($data->srv_type == 'RI'){
                         if($data->visit_class_id >4){ // bila naik ke vip, maka ambil kelas 1

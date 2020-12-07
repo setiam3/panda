@@ -121,17 +121,17 @@ return [
             }
             return implode($s);
         }],
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'terapi',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'terapi','format'=>'html',
         'value'=>function($data){
             $s = [];
             foreach ($data->list_obat as $row){
                 if (empty($row['f1'])){
                     $s = 'null';
                 }else{
-                    $s[] = $row['f1'].$row['f3'].$row['f4'];
+                    $s[] = "- NO: ".$row['f1'].", ".$row['f3'].", ".$row['f4']."<br>";
                 }
             }
-            return json_encode($s);
+            return implode($s);
 
         },
     ],

@@ -119,14 +119,14 @@ class MantoelSearch extends PiringMangkok
         $desinfektan_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_jenazah).'%\'');
         $transport_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->transport_mobil).'%\'');
         $desinfektan_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_mobil).'%\'');
-        $visit_date = new Expression('visit_date::date between\''.$this->createTimeStart.'\'and\''.$this->createTimeEnd.'\'');
+//        $visit_date = new Expression('visit_date::date between\''.$this->createTimeStart.'\'and\''.$this->createTimeEnd.'\'');
         $birthdate = new Expression('TO_CHAR (px_birthdate::date,\'dd-mm-yyyy\') LIKE \'%'.$this->px_birthdate.'%\'');
         $tglsep = new Expression('TO_CHAR (sep_tgl::date,\'dd-mm-yyyy\') LIKE \'%'.$this->sep_tgl.'%\'');
         $tglmeninggal = new Expression('TO_CHAR (tgl_meninggal::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_meninggal.'%\'');
         $tgl_pulang = new Expression('TO_CHAR (visit_end_date::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_pulang.'%\'');
         $query
             ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
-            ->andWhere($visit_date)
+//            ->andWhere($visit_date)
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
             ->andFilterWhere(['like', 'lower(px_name)', strtolower($this->px_name)])
             ->andFilterWhere(['like', 'lower(px_sex)', strtolower($this->px_sex)])

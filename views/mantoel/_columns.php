@@ -146,7 +146,12 @@ return [
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'cara_pulang', 'label'=>'Cara Pulang'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_meninggal', 'label'=>'Kejadian Meninggal',
         'value'=>function($data){
+        if($data->visit_end_cause_id == "52"){
             $tgl_meninggal = date('d-m-Y',strtotime($data->tgl_meninggal));
+        }else{
+            $tgl_meninggal = "null";
+        }
+//            $tgl_meninggal = date('d-m-Y',strtotime($data->tgl_meninggal));
             return $tgl_meninggal;
         }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', 'label'=>'Status KLB'],
@@ -201,42 +206,34 @@ return [
             $s=$tarif=[];
             foreach($data->hasil_penunjang as $row){
                 if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
-//                            if($row['f3']== 'Darah Lengkap'){
-//                                $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).")";
-////////                                if(stripos($row['f4'], '0101010101') !== false){
-////                                $s[] = $row['f5'];
-//////
-////                                }
-//////
-//                            }
-                    $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
+                    $s[] = $row['f3']." Rp. ".number_format($row['f6'],0,".",".").", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
                 }
 
             }
-            return implode($s,', ');
+            return implode($s,'-');
         }],
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'hasil radiologi',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'Hasil Radiologi',
         'value'=>function($data){
             $s=[];
             foreach($data->hasil_penunjang as $row){
                         if ($row['f2'] == "RADIOLOGI") {
-                            $s[] = $row['f3'] . ', '.$row['f6'].", ". date_format(date_create($row['f5']),'d-m-Y' ).', '. $row['f4'];
+                            $s[] = $row['f3'] . ', Rp. '.number_format($row['f6'],0, ".", ".").", ". date_format(date_create($row['f5']),'d-m-Y' ).', '. $row['f4'];
 
                         }
             }
             return implode($s);
         }],
-    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'terapi',
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'terapi','format'=>'html',
         'value'=>function($data){
             $s = [];
             foreach ($data->list_obat as $row){
                 if (empty($row['f1'])){
                     $s = 'null';
                 }else{
-                    $s[] = $row['f1'].$row['f3'].$row['f4'];
+                    $s[] = "- NO: ".$row['f1'].", ".$row['f3'].", (Rp. ".number_format($row['f4'],0,'.','.').") <br>";
                 }
             }
-            return json_encode($s);
+            return implode($s);
 
         },
     ],
