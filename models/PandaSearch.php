@@ -21,6 +21,7 @@ class PandaSearch extends PiringMangkok
                 'diagnosa_px',
                 'diagnosa_pxs',
                 'tindakan_px',
+                'tindakan_px2',
                 'px_birthdate',
 //            'billing_inacbg',
                 'visit_end_doctor_name',

@@ -200,6 +200,20 @@ return [
             }
             return implode($s,', ');
         }],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tindakan_px2','label'=>'Tindakan ICD 9','format'=>"html",
+        'value'=>function($data){
+            $s=[];
+            foreach ($data->tindakan_px2 as $row){
+                if (!empty($row)){
+                    if (!empty($row['f1'])){
+                        $s[] =$row['f1'].", ". $row['f2']."<br>";
+                    }
+                }else{
+                    $s[]='null';
+                }
+            }
+            return implode($s,', ');
+        }],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium','format' => 'html',//tanggal older
         'value'=>function($data){

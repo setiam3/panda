@@ -37,7 +37,7 @@ return [
             ],
         ]),
         'value'=>function($data){
-            $visit_date = date('d-m-Y H:m:s',strtotime($data->visit_end_date)); return $visit_date;
+            $visit_date = date('d-m-Y H:m:s',strtotime($data->visit_date)); return $visit_date;
         },
         'label'=>'Tanggal Masuk'
     ],
@@ -68,6 +68,17 @@ return [
         },
         'label'=>'Tempat layanan'
     ],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'retribusi', 'label'=>'Retribusi',
+        'value'=>function($data){
+            $s = [];
+            foreach ($data->tagihan_pelayanan as $row){
+                if ($row['f2'] == 'PENDAFTARAN'){
+                    $s []= 'Rp. '.number_format($row['f4'],0, ".", ".");
+                }
+            }
+            return implode($s,',');
+        }
+    ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', 'label'=>'Status KLB'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'Diagnosa Primer','format'=>"html",
         'value'=>function($data){
@@ -96,6 +107,35 @@ return [
                 }
             }
             return implode($s,', ');
+        }
+    ],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'Kondisi Lain','format'=>"html",
+        'value'=>function($data){
+            $s=[];
+            foreach ($data->diagnosa_px as $row){
+                if (!empty($row)){
+                    if ($row['f3'] == '4'){
+                        $s[] =$row['f1'].", ". $row['f2']."<br>";
+                    }
+                }else{
+                    $s[]='null';
+                }
+            }
+            return implode($s,', ');
+        }],
+    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tindakan_px2','label'=>'Tindakan ICD 9','format'=>"html",
+        'value'=>function($data){
+            $s=[];
+            foreach ($data->tidakan_px2 as $row){
+                if (!empty($row)){
+                    if (!empty($row['f1'])){
+                        $s[] =$row['f1'].", ". $row['f2']."<br>";
+                    }
+                }else{
+                    $s[]='null';
+                }
+            }
+            return implode($s,', ');
         }],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium','format' => 'html',//tanggal older
@@ -103,12 +143,13 @@ return [
             $s=$tarif=[];
             foreach($data->hasil_penunjang as $row){
                 if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
-                    $s[] = $row['f3']." ".$row['f6'].", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
+                    $s[] = $row['f3']." Rp. ".number_format($row['f6'],0,".",".").", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
                 }
 
             }
-            return implode($s,', ');
-        }],
+            return implode($s,'-');
+        }
+    ],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'hasil radiologi',
         'value'=>function($data){
@@ -128,7 +169,7 @@ return [
                 if (empty($row['f1'])){
                     $s = 'null';
                 }else{
-                    $s[] = "- NO: ".$row['f1'].", ".$row['f3'].", ".$row['f4']."<br>";
+                    $s[] = "- NO: ".$row['f1'].", ".$row['f3'].", (Rp. ".number_format($row['f4'],0,'.','.').") <br>";
                 }
             }
             return implode($s);
@@ -194,6 +235,18 @@ return [
             return implode($s,'');
         }],
 
+    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'transport_mobil',
+        'value'=>function($data){
+            $s=[];
+            foreach ($data->tagihan_pelayanan as $row){
+                if (stripos($row['f3'],'Transport Mobil Jenazah') !== false){
+                    $s[] ="Rp. ".number_format($row['f4'],0, ".", ".");
+                }
+            }
+            return implode($s,'');
+        }
+    ],
+
 //    ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'transport_mobil',
 //        'value'=>function($data){
 //            $s=[];
@@ -214,7 +267,8 @@ return [
                 }
             }
             return implode($s,'');
-        }],
+        }
+    ],
 
 
 //
