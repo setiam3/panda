@@ -80,7 +80,7 @@ return [
                     $s []= 'Rp. '.number_format($row['f4'],0, ".", ".");
                 }
             }
-            return implode($s,',');
+            return implode(',',$s);
         }
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kelas_pelayanan',
@@ -88,7 +88,7 @@ return [
             foreach ($data->kelas_pelayanan as $row){
                 $s[] = $row['f3'];
             }
-            return implode($s,', ');
+            return implode(', ',$s);
         },
         'label'=>'Kelas Perawatan',
     ],
@@ -138,7 +138,7 @@ return [
                     $s[] = $row['f3'].$row['f4']." ( ". date('d-m-Y',strtotime($row['f1'])).' - '.date('d-m-Y',strtotime($row['f2'])).") ";
                 }
             }
-            return implode($s,', ');
+            return implode(', ',$s);
         },
         'label'=>'Tempat Layanan',
     ],
@@ -168,7 +168,7 @@ return [
                     $s[]='null';
                 }
             }
-            return implode($s,', ');
+            return implode(', ',$s);
         }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_pxs','label'=>'Diagnosa Sekunder','format' => 'html',
@@ -183,7 +183,7 @@ return [
                     $s[]='null';
                 }
             }
-            return implode($s,', ');
+            return implode(', ',$s);
         }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'diagnosa_px','label'=>'kondisi lain','format'=>"html",
@@ -198,7 +198,7 @@ return [
                     $s[]='null';
                 }
             }
-            return implode($s,', ');
+            return implode(', ',$s);
         }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tindakan_px2','label'=>'Tindakan ICD 9','format'=>"html",
         'value'=>function($data){
@@ -212,7 +212,7 @@ return [
                     $s[]='null';
                 }
             }
-            return implode($s,', ');
+            return implode(', ',$s);
         }],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium','format' => 'html',//tanggal older
@@ -224,7 +224,7 @@ return [
                 }
 
             }
-            return implode($s,'-');
+            return implode('-',$s);
         }],
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'Hasil Radiologi',
         'value'=>function($data){
@@ -235,19 +235,19 @@ return [
 
                         }
             }
-            return implode($s);
+            return implode('',$s);
         }],
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'terapi','format'=>'html',
         'value'=>function($data){
             $s = [];
             foreach ($data->list_obat as $row){
                 if (empty($row['f1'])){
-                    $s = 'null';
+                    return $s = 'null';
                 }else{
                     $s[] = "- NO: ".$row['f1'].", ".$row['f3'].", (Rp. ".number_format($row['f4'],0,'.','.').") <br>";
                 }
             }
-            return implode($s);
+            return implode('',$s);
 
         },
     ],
@@ -260,7 +260,7 @@ return [
                 }
 
             }
-            return implode($s,'');
+            return implode('',$s);
         }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'kantong_jenazah',
         'value'=>function($data){
@@ -271,7 +271,7 @@ return [
                 }
 
             }
-            return implode($s,'');
+            return implode('',$s);
         }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'peti_jenazah',
@@ -283,7 +283,7 @@ return [
                 }
 
             }
-            return implode($s,'');
+            return implode('',$s);
         }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'plastik_jenazah',
@@ -294,7 +294,7 @@ return [
                     $s[] ="Rp. ".number_format($row['f4'],0, ".", ".");
                 }
             }
-            return implode($s,'');
+            return implode('',$s);
         }],
 
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'desinfektan_jenazah',
@@ -305,7 +305,7 @@ return [
                     $s[] ="Rp. ".number_format($row['f4'],0, ".", ".");
                 }
             }
-            return implode($s,'');
+            return implode('',$s);
         }],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'transport_mobil',
@@ -316,7 +316,7 @@ return [
                     $s[] ="Rp. ".number_format($row['f4'],0, ".", ".");
                 }
             }
-            return implode($s,'');
+            return implode('',$s);
         }],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'desinfektan_mobil',
@@ -327,7 +327,7 @@ return [
                     $s[] ="Rp. ".number_format($row['f4'],0, ".", ".");
                 }
             }
-            return implode($s,'');
+            return implode('',$s);
         }],
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'billing_inacbg','label'=>'Total Tarif RS',
