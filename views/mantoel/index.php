@@ -14,7 +14,6 @@ $idmodal=md5($dataProvider->query->modelClass);
                 <div class="pendapatan-index">
                     <div id="ajaxCrudDatatable">
 
-
                         <?=GridView::widget([
                             'id'=>'crud-datatable'.$idmodal,
                             'dataProvider' => $dataProvider,
@@ -22,13 +21,25 @@ $idmodal=md5($dataProvider->query->modelClass);
                             'pjax'=>true,
                             'columns' => require(__DIR__.'/_columns.php'),
                             'toolbar'=> [
-
+                                ['content' => Html::a(
+                                    '<i class="glyphicon glyphicon-repeat"></i>',
+                                    ['refresh'],
+                                    ['target' => '_blank','title' => 'refresh materializview', 'class' => 'btn btn-default','data-pjax'=>"0"]
+//                                    [
+//                                        'data-toggle' => "tooltip",
+//                                        'data-placement' => "top",
+//                                        'title' => 'refresh materializview',
+//                                        'class' => 'btn btn-info btn-flat pull-left',
+//                                        'id' => 'verif'
+//                                    ]
+                                )],
                                 ['content'=>
                                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
                                         ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
                                     '{toggleData}'.
                                     '{export}'
                                 ],
+
                             ],
                             'striped' => true,
                             'condensed' => true,

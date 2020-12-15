@@ -6,6 +6,7 @@ use app\models\MantoelSearch;
 use app\models\PiringMangkok;
 use app\models\PiringMangkokSearch;
 use yii\db\Expression;
+use Yii;
 
 class MantoelController extends \yii\web\Controller
 {
@@ -30,6 +31,13 @@ class MantoelController extends \yii\web\Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+
+    }
+
+    public function actionRefresh(){
+        $sql = "REFRESH MATERIALIZED VIEW yanmed.v_transfer_ina";
+        $aa = Yii::$app->db->createCommand($sql)->queryAll();
+        echo 'berhasil';
 
     }
 

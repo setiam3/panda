@@ -84,6 +84,12 @@ class PiringMangkokController extends \yii\web\Controller
         }
     }
 
+    /*
+     * PROSES DATA CLAIM KE ECLAIM
+     * UPLOAD DATA PASIEN
+     * harus berhasil
+    */
+
     public function klaim_baru($nosep,$data){
         $member_nomer = empty($data->pxsurety_no)? "0" : $data->pxsurety_no;
         $sjp_no = empty($nosep)? "000" : $nosep;
@@ -115,8 +121,8 @@ class PiringMangkokController extends \yii\web\Controller
 
         $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
         /*uncomment update*/
-//        var_dump($dt);die();
         $metadata = $dt['metadata']; //status berhasil
+//        var_dump($metadata,"AA ",$request);die();
 
         if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
             $hasil = $dt['response'];
@@ -145,6 +151,9 @@ class PiringMangkokController extends \yii\web\Controller
         }
     }
 
+    /*
+     * SET_CLAIM_DATA TIDAK BISA DIULOAD JIKA KLAIM BARU TIDAK BERHASIL
+    */
     public function set_claim_data($noka, $nosep, $data){ //$param = $data
         $member_no = $noka;
         $jamkesda_surety_id="113";
@@ -169,14 +178,13 @@ class PiringMangkokController extends \yii\web\Controller
             }
 
             foreach ($data->ruang_rawat_px as $row){
-            $jumlah_hari_upgrade = $row['f5'];
-            $surety_class_id = $row['f7'];
-
+                $jumlah_hari_upgrade = $row['f5'];
+                $surety_class_id = $row['f7'];
             }
+
             if ($jenis_kelas == 'RI'){
                 $jenis_rawat = '1'; // rawat inap
                 $kelas_rawat = $surety_class_id-1;
-
 
                 if(count($jenis) >= $data->class_id && $data->class_id <= 4){//if($param['visit_class_id'] >= $param['surety_class_id'] && $param['visit_class_id'] <= 4){
                     $naik_kelas = '0';
@@ -310,6 +318,14 @@ class PiringMangkokController extends \yii\web\Controller
             }else{
                 $select['pemulasaraan_jenazah'] = $select['mobil_jenazah'] = 0;
             }
+            $s = [];
+            foreach ($data->diagnosa_px as $px){
+                if (!empty($px['f1'])){
+                    $s[] = $px['f1'];
+                }
+            }
+            $diagnosa = implode('#',$s);
+//            var_dump($diagnosa);die();
             $request = '{
 						"metadata": {
 							"method": "set_claim_data",
@@ -328,7 +344,7 @@ class PiringMangkokController extends \yii\web\Controller
 							"jenis_rawat": "'.$jenis_rawat.'",
 							"kelas_rawat": "'.$kelas_rawat.'",
 							"discharge_status": "'.$keadaan_krs.'",
-							"diagnosa": "'.$data->diagnosa.'",
+							"diagnosa": "'.$diagnosa.'",
 							"procedure": "'.$data->tindakan_px.'",
 							"tarif_rs":  '.$total_tagihan.',
 							"nama_dokter": "'.$data->visit_end_doctor_name.'",
@@ -349,12 +365,12 @@ class PiringMangkokController extends \yii\web\Controller
 							"episodes":"'.$episodes.'"
 						}
 					}';
-//            var_dump($request);die();
 
             //conek server
              $dt = $this->connect_inacbg($request,$data->surety_id,$this->bpjs_surety_id,$this->jamkesda_surety_id);
             /*uncomment konek*/
              $metadata = $dt['metadata'];
+//            var_dump($metadata, "AA",$request);die();
 //        var_dump($metadata);die();
              if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 $this->actionUploadberkas($data,$nosep);
@@ -374,12 +390,14 @@ class PiringMangkokController extends \yii\web\Controller
                          'transfer_id'=>Yii::$app->db->getLastInsertID(),
                      ), 'visit_id=:visit_id',array(':visit_id'=>$data->visit_id))->execute();
 
-                 echo json_encode($metadata);
+//                 echo json_encode($metadata);
+//                 echo $request;
+//                 var_dump($metadata,"aa",$request);
 
-//                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
-//                     $this->grouper_stage_1($nosep,$data);
-//////                     $this->grouper_stage_1($nosep,$param);
-//                 }
+                 if($this->is_go_grouper != '0'){ // saat transfer tidak perlu di grouper
+                     $this->grouper_stage_1($nosep,$data);
+////                     $this->grouper_stage_1($nosep,$param);
+                 }
              }
              else{
                  $this->delete_all_file($nosep,$data);
@@ -417,7 +435,7 @@ class PiringMangkokController extends \yii\web\Controller
             if($metadata['code'] == 200 && $metadata['message'] == "Ok"){
                 if($this->is_go_grouper != '0'){
                     $hasil = $act['response'];
-//                    var_dump($hasil);die();
+                    echo $hasil;die();
                     $tarif = $act['tarif_alt'][$surety_class_id-1];
 
                     if($data->srv_type == 'RI'){
@@ -494,6 +512,9 @@ class PiringMangkokController extends \yii\web\Controller
 
     }
 
+    /*
+     * SET_CLAIM_DATA TIDAK BISA DIULOAD JIKA KLAIM BARU TIDAK BERHASIL
+    */
     public function actionUploadberkas($data,$nosep)
     {
 
@@ -908,4 +929,5 @@ class PiringMangkokController extends \yii\web\Controller
         }
         return $valueult == 0;
     }
+
 }

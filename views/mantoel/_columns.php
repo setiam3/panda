@@ -11,7 +11,7 @@ return [
 
     [ 'class'=>'\kartik\grid\DataColumn','label'=>'Tanggal Masuk',
         'value'=>function($data){
-            $visit =date('d-m-Y',strtotime($data->visit_date));
+            $visit =date('d-m-Y H:i:s',strtotime($data->visit_date));
             return $visit;
         },
         'attribute'=>'visit_date',
@@ -31,27 +31,15 @@ return [
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'tgl_pulang', 'label'=>'Tanggal Pulang',
         'value'=>function($data){
-            $visit_end_date = date('d-m-Y',strtotime($data->visit_end_date));
+            $visit_end_date = date('d-m-Y H:i:s',strtotime($data->visit_end_date));
             return $visit_end_date;
         },
-//        'headerOptions' => ['style' => 'width:100%'],
-//        'format' => 'date',
-//        'filterType' => GridView::FILTER_DATE,
-//        'filterWidgetOptions' => [
-//            'size' => 'xs',
-//            'pluginOptions' => [
-//                'format' => 'DD-MM-YYYY',
-//                'autoWidget' => true,
-//                'autoclose' => true,
-//                'todayHighlight' => true
-//            ]
-//        ]
+
     ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'krs', 'label'=>'KRS',
         'headerOptions' => ['width' => '150'],
         ],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_name', 'label'=>'Nama Pasien'],
-//    [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'visit_id', 'label'=>'visit'],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'px_birthdate',
 
         'value'=>function($data){
@@ -151,7 +139,6 @@ return [
         }else{
             $tgl_meninggal = "null";
         }
-//            $tgl_meninggal = date('d-m-Y',strtotime($data->tgl_meninggal));
             return $tgl_meninggal;
         }],
     [ 'class'=>'\kartik\grid\DataColumn', 'attribute'=>'klb_name', 'label'=>'Status KLB'],
@@ -217,14 +204,48 @@ return [
 
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_laborat', 'label'=>'hasil laboratorium','format' => 'html',//tanggal older
         'value'=>function($data){
-            $s=$tarif=[];
-            foreach($data->hasil_penunjang as $row){
-                if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
-                    $s[] = $row['f3']." Rp. ".number_format($row['f6'],0,".",".").", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
+            $visit_id = $data->visit_id;
+            $sql = "SELECT mu.unit_id, mu.unit_name,mc.namecheck,c.result,namegroup,bh.billing_total,c.created_at FROM
+ yanmed.checkup c 
+INNER join yanmed.ms_check mc on c.ms_check_id = mc.idcheck
+INNER join yanmed.ms_groupcheck mg on mg.idgroup=mc.idgroup 
+INNER JOIN yanmed.billing bh ON c.billing_id = bh.billing_id
+INNER JOIN yanmed.services s ON c.service_id = s.srv_id
+INNER JOIN yanmed.visit v ON s.visit_id = v.visit_id
+INNER JOIN admin.ms_unit mu ON mu.unit_id = s.unit_id
+WHERE v.visit_id = $visit_id";
+            $laborat = Yii::$app->db->createCommand($sql)->queryAll();
+            $dt=[];
+            $conten = "<table border='0' width='500px'>";
+
+            $conten .= "<tr><td>nama</td>
+									<td align='left'>biaya</td>
+									<td align='left'>hasil</td>
+									<td class='tabel-kanan tabel-kiri' width='15%'>waktu</td>";
+            $conten	.= "<tr>";
+            foreach ($laborat as $data){
+                if($data['unit_name'] == 'LAB PK'){
+//                    $dt[] = $data['namecheck'].', Rp. '.number_format($data['billing_total'],0,".",".").", ".$data['result']."<br>";
+
+                    $conten .= "<tr><td>".$data['namecheck']."</td>
+									<td align='left'>".'Rp. '.number_format($data['billing_total'],0,".",".")."</td>
+									<td>".$data['result']."</td>
+									<td class='tabel-kanan tabel-kiri' width='50%'>".date('d-m-Y',strtotime($data['created_at']))."</td>";
+                    $conten	.= "<tr>";
                 }
 
             }
-            return implode('-',$s);
+            $conten	.= "</table>";
+            return $conten;
+
+//            $s=$tarif=[];
+//            foreach($data->hasil_penunjang as $row){
+//                if($row['f2'] == "LAB PK" || $row['f2'] == "PATOLOGI ANATOMI"){
+//                    $s[] = $row['f3']." Rp. ".number_format($row['f6'],0,".",".").", ".$row['f4']." (".date('d-m-Y',strtotime($row['f5'])).") <br>";
+//                }
+//
+//            }
+//            return implode('-',$s).json_encode($laborat);
         }],
     ['class'=>'\kartik\grid\DataColumn', 'attribute'=>'hasil_radoilogi', 'format'=>'html', 'label'=>'Hasil Radiologi',
         'value'=>function($data){

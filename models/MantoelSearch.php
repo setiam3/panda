@@ -172,4 +172,10 @@ class MantoelSearch extends PiringMangkok
             ->andWhere($unit);
         return $dataProvider;
     }
+
+    public function h_laborat(){
+        $sql = "SELECT mc.namecheck,c.result,namegroup FROM yanmed.checkup c
+        inner join yanmed.ms_check mc on c.ms_check_id = mc.idcheck
+        inner join yanmed.ms_groupcheck mg on mg.idgroup=mc.idgroup";
+    }
 }
