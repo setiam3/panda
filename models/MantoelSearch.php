@@ -37,9 +37,8 @@ class MantoelSearch extends PiringMangkok
             'krs',
             'tagihan_pelayanan',
             'cara_pulang',
-            'hasil_laborat',
+//            'hasil_laborat',
             'retribusi',
-            'hasil_laborat',
 //            'hasil_penunjang2',
             'hasil_penunjang',
             'hasil_radoilogi',
@@ -75,7 +74,6 @@ class MantoelSearch extends PiringMangkok
         $query->andFilterWhere([
             'visit_id'=>$this->visit_id,
             'px_id'=>$this->px_id,
-//            'surety_class_id'=>$this->surety_class_id,
             'klb_id'=>$this->klb_id,
             'px_norm'=>$this->px_norm,
             'surety_id'=>$this->surety_id,
@@ -120,14 +118,12 @@ class MantoelSearch extends PiringMangkok
         $desinfektan_jenazah = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_jenazah).'%\'');
         $transport_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->transport_mobil).'%\'');
         $desinfektan_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_mobil).'%\'');
-//        $visit_date = new Expression('visit_date::date between\''.$this->createTimeStart.'\'and\''.$this->createTimeEnd.'\'');
         $birthdate = new Expression('TO_CHAR (px_birthdate::date,\'dd-mm-yyyy\') LIKE \'%'.$this->px_birthdate.'%\'');
         $tglsep = new Expression('TO_CHAR (sep_tgl::date,\'dd-mm-yyyy\') LIKE \'%'.$this->sep_tgl.'%\'');
         $tglmeninggal = new Expression('TO_CHAR (tgl_meninggal::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_meninggal.'%\'');
         $tgl_pulang = new Expression('TO_CHAR (visit_end_date::date,\'dd-mm-yyyy\') LIKE \'%'.$this->tgl_pulang.'%\'');
         $query
             ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
-//            ->andWhere($visit_date)
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
             ->andFilterWhere(['like', 'lower(px_name)', strtolower($this->px_name)])
             ->andFilterWhere(['like', 'lower(px_sex)', strtolower($this->px_sex)])
@@ -135,16 +131,12 @@ class MantoelSearch extends PiringMangkok
             ->andFilterWhere(['like', 'lower(surety_name)', strtolower($this->surety_name)])
             ->andFilterWhere(['like', 'sep_no', $this->sep_no])
             ->andFilterWhere(['like', 'pxsurety_no', $this->pxsurety_no])
-//            ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
             ->andWhere($tgl_pulang)
             ->andWhere($birthdate)
             ->andWhere($tglsep)
             ->andWhere($tglmeninggal)
-//            ->andFilterWhere(['like', 'text(ruang_rawat_px)', $this->ruang_rawat_px])
             ->andWhere($ruang_rawat)
-//            ->andFilterWhere(['=', 'lower(jns_layanan)', strtolower($this->jns_layanan)])
-            ->andFilterWhere(['=', 'lower(jns_layanan)', $jns_layanan])
-//            ->andFilterWhere(['like', 'kelas_pelayanan', $this->kelas_pelayanan])
+            ->andFilterWhere(['=', 'lower(jns_layanan)', strtolower($jns_layanan)])
             ->andWhere($kelas_pelayanan)
             ->andWhere($diagnosa)//diagnosa primer
             ->andWhere($diagnosaS)//diagnosa sekunder
@@ -168,7 +160,6 @@ class MantoelSearch extends PiringMangkok
             ->andWhere($transport_mobil)
             ->andWhere($desinfektan_mobil)
             ->andFilterWhere(['like', 'lower(cara_pulang)',strtolower($this->cara_pulang)])
-//            ->andFilterWhere(['like', 'unit_layanan',(string)$this->unit_layanan]);
             ->andWhere($unit);
         return $dataProvider;
     }

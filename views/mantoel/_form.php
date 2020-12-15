@@ -25,18 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'surety_name')->widget(\kartik\select2\Select2::classname(),[
             'data' => \yii\helpers\ArrayHelper::map(
                     \app\models\MantoelSearch::find()->all(),'surety_name','surety_name'
-//                (new \yii\db\Query())
-//                    ->from('yanmed.ms_surety')
-////                ->where(['is_pm'=>'TRUE'])
-//                ->andWhere(['surety_active'=>'TRUE'])
-//                    ->orderBy('surety_name')->all(),'surety_name','surety_name'
             ),
             'language' => 'de',
             'options' => ['placeholder' => 'Select a state ...'],
             'pluginOptions' => [
                 'allowClear' => true
             ],
-//            'name' => 'surety_name'
+
         ])->label('Jenis Penjamain') ?>
         <?= $form->field($model, 'visit_date')->widget(\kartik\daterange\DateRangePicker::className(),[
             'attribute' => 'only_date',
