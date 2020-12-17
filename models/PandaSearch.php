@@ -117,7 +117,6 @@ class PandaSearch extends PiringMangkok
         $desinfektan_mobil = new Expression('lower(tagihan_pelayanan::text) like \'%'.strtolower($this->desinfektan_mobil).'%\'');
         $query
             ->andFilterWhere(['between', 'visit_date', $this->createTimeStart,$this->createTimeEnd])
-//            ->andFilterWhere(['like', 'visit_date', $this->visit_date])
             ->andFilterWhere(['like', 'px_norm', $this->px_norm])
             ->andFilterWhere(['like', 'px_noktp', $this->px_noktp])
             ->andWhere($birthdate)
@@ -129,7 +128,6 @@ class PandaSearch extends PiringMangkok
             ->andFilterWhere(['like', 'surety_name', $this->surety_name])
             ->andFilterWhere(['like', 'sep_no', $this->sep_no])
             ->andFilterWhere(['like', 'pxsurety_no', $this->pxsurety_no])
-//            ->andFilterWhere(['like', 'visit_end_date', $this->visit_end_date])
             ->andFilterWhere(['between', 'visit_end_date', $this->createTimeStart,$this->createTimeEnd])
             ->andFilterWhere(['like', 'ruang_rawat_px', $this->ruang_rawat_px])
             ->andFilterWhere(['like', 'krs', $this->krs])

@@ -41,16 +41,8 @@ class MantoelController extends \yii\web\Controller
 
     }
 
-    public function actionIndex1()
-    {
-        $where='';
-        $searchModel = new MantoelSearch();
-        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams,$where);
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+
+
 //    public function actionGeneratecol(){
 //        $model=(new PiringMangkok())->attributes;
 //        echo "[[";
